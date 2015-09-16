@@ -145,6 +145,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Cviebrock\EloquentSluggable\SluggableServiceProvider::class,
+        Bestmomo\Scafold\ScafoldServiceProvider::class,
 
     ],
 

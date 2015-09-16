@@ -7,7 +7,8 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "cviebrock/eloquent-sluggable": "^3.0"
+        "cviebrock/eloquent-sluggable": "^3.0",
+        "bestmomo/scafold": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
