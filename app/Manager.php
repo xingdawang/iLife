@@ -21,7 +21,7 @@ class Manager extends Model implements AuthenticatableContract,
      *
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 'managers';
 
     /**
      * The attributes that are mass assignable.
