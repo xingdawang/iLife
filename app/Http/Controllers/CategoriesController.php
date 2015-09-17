@@ -72,13 +72,15 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param CategoriesFormRequest $request
+     * @param $id
+     * @return \Illuminate\View\View
      */
-    public function update(Request $request, $id)
+    public function update(CategoriesFormRequest $request, $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->update($request->all());
+        return redirect('categories');
     }
 
     /**

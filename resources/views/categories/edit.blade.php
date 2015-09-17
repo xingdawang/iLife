@@ -1,6 +1,11 @@
 @extends('app')
 @section('content')
-    {!! Form::model($category, ['method' => 'PATCH', 'action' =>['CategoriesController@update', $category->id], 'url'=>'categories', 'class'=>'form-horizontal']) !!}
+    {!! Form::model($category, [
+        'method' => 'PATCH',
+        'action' =>['CategoriesController@update', $category->id],
+
+        'class'=>'form-horizontal'
+    ]) !!}
 
     <fieldset>
         <div class="form-group">
