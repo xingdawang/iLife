@@ -20,6 +20,6 @@
     </li>
 @endforeach
     <li class="list-group-item">
-        <a href="{!! url('categories/create') !!}"> Add a new category</a>
+        <a href="{!! url('categories/create') !!}"> <strong><font color="purple">Add a new category</font></strong></a>
     </li>
 </ul>
