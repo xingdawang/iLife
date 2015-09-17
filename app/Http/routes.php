@@ -11,10 +11,12 @@
 |
 */
 
-
+/**
 Route::get('/', function () {
     return view('welcome');
 });
+*/
+Route::get('/','CategoriesController@index');
 Route::controllers([
     'auth'      => 'Auth\AuthController',
     'password'  => 'Auth\PasswordController'
