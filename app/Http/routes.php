@@ -22,3 +22,4 @@ Route::controllers([
     'password'  => 'Auth\PasswordController'
 ]);
 Route::resource('categories', 'CategoriesController');
+Route::resource('articles', 'ArticlesController');
