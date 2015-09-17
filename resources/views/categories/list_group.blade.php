@@ -16,7 +16,10 @@
 <ul class="list-group">
 @foreach($categories as $category)
     <li class="list-group-item">
-        {!! $category->name  !!}
+        <a href=" {!! url('/categories', $category->id) !!}">{!! $category->name  !!}</a>
     </li>
 @endforeach
+    <li class="list-group-item">
+        <a href="{!! url('categories/create') !!}"> Add a new category</a>
+    </li>
 </ul>

@@ -27,4 +27,13 @@
             </div>
         </fieldset>
     {!! Form::close() !!}
+    <!-- Error lists-->
+    <div class="form-horizontal">
+        <div class="col-lg-2"></div>
+        <div class="form-group">
+            <div class="col-lg-8">
+                @include('errors.error_list')
+            </div>
+        </div>
+    </div>
 @stop
