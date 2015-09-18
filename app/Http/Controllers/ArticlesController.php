@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Article;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -10,6 +11,13 @@ use App\Http\Controllers\Controller;
 class ArticlesController extends Controller
 {
     /**
+     *
+     */
+    public function __construct(){
+        $this->middleware('auth', ['only' => 'create']);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -17,7 +25,8 @@ class ArticlesController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('articles.index', compact('categories'));
+        $articles = Article::all();
+        return view('articles.index', compact('categories', 'articles'));
     }
 
     /**
@@ -40,7 +49,16 @@ class ArticlesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $new_article = new Article;
+        $new_article->manager_id = auth()->user()->id;
+        $new_article->category_id = $request->select;
+        $new_article->title = $request->title;
+        $new_article->body = $request->body;
+        $new_article->save();
+
+        $categories = Category::all();
+        $articles = Article::all();
+        return view('articles.index', compact('categories', 'articles'));
     }
 
     /**
@@ -51,7 +69,9 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
-        //
+        $article = Article::findOrFail($id);
+        $categories = Category::all();
+        return view('articles.show', compact('categories','article'));
     }
 
     /**
