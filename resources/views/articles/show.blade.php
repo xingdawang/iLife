@@ -4,9 +4,12 @@
         @include('.categories.list_group')
     </div>
     <div class="col-lg-8">
-        <h1>{{ $article->title }}</h1>
+        <h1>{!! $article->title  !!}</h1>
         <article>
-            {{ $article->body }}
+            <hr />
+            <h4>
+                {!! nl2br($article->body) !!}
+            </h4>
         </article>
     </div>
 @stop
