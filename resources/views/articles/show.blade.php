@@ -11,5 +11,7 @@
                 {!! nl2br($article->body) !!}
             </h4>
         </article>
+        <hr />
+        @include('.comments.index')
     </div>
 @stop

@@ -11,11 +11,6 @@
 |
 */
 
-/**
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
 Route::get('/','CategoriesController@index');
 Route::controllers([
     'auth'      => 'Auth\AuthController',
@@ -23,3 +18,4 @@ Route::controllers([
 ]);
 Route::resource('categories', 'CategoriesController');
 Route::resource('articles', 'ArticlesController');
+Route::resource('comments', 'CommentsController');
