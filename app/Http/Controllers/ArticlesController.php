@@ -82,7 +82,10 @@ class ArticlesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categories = Category::all();
+        $category_list = Category::lists('name', 'id');
+        $article = Article::findOrFail($id);
+        return view('articles.edit', compact('categories', 'category_list', 'article'));
     }
 
     /**
@@ -94,7 +97,10 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //dd("in update method");
+        $article = Article::findOrFail($id);
+        $article->update($request->all());
+        return redirect('articles');
     }
 
     /**
@@ -105,6 +111,8 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $article = Article::findOrFail($id);
+        $article->delete();
+        return redirect('articles');
     }
 }
