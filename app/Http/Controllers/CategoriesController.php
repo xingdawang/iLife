@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Article;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -53,8 +54,10 @@ class CategoriesController extends Controller
      */
     public function show($id)
     {
+        $categories = Category::all();
         $category = Category::findOrFail($id);
-        return view('categories.edit', compact('category'));
+        $articles = Article::where('category_id', '=', $category->id)->get();
+        return view('categories.show', compact('categories', 'category', 'articles'));
     }
 
     /**

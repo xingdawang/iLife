@@ -19,5 +19,4 @@
         <a href=" {!! url('/categories', $category->id) !!}">{!! $category->name  !!}</a>
     </li>
 @endforeach
-    @include('categories.add_list_group')
 </ul>
