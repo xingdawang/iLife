@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Category;
+use App\Comment;
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -26,6 +28,7 @@ class ArticlesController extends Controller
     {
         $categories = Category::all();
         $articles = Article::all();
+
         return view('articles.index', compact('categories', 'articles'));
     }
 
@@ -71,7 +74,14 @@ class ArticlesController extends Controller
     {
         $article = Article::findOrFail($id);
         $categories = Category::all();
-        return view('articles.show', compact('categories','article'));
+        $comments = DB::table('comments')
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->where('article_id', '=', $id)
+            ->orderBy('comments.created_at', 'desc')
+            ->select('comments.*', 'users.name')
+            ->get();
+        //dd($comments);
+        return view('articles.show', compact('categories','article', 'comments'));
     }
 
     /**

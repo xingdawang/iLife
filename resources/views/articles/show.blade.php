@@ -12,6 +12,7 @@
             </h4>
         </article>
         <hr />
-        @include('.comments.index')
+        @include('comments.show')
+        @include('comments.create')
     </div>
 @stop
