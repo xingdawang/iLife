@@ -17,8 +17,8 @@ class Article extends Model
         return $this->belongsTo('App\Category');
     }
 
-    public function manager(){
-        return $this->belongsTo('App\Manager');
+    public function user(){
+        return $this->belongsTo('App\User');
     }
 
     public function images(){

@@ -14,11 +14,11 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('manager_id')
+            $table->integer('user_id')
                 ->unsigned();
-            $table->foreign('manager_id')
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('managers')
+                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->integer('category_id')
