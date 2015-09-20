@@ -21,6 +21,18 @@
         </div>
     </div>
     <div class="form-group">
+        {!! Form::label('article_img', 'Article Image:', ['class' => 'col-lg-2 control-label']) !!}
+        <div class="col-lg-8">
+            {!! Form::file('image') !!}
+        </div>
+    </div>
+    <div class="form-group">
+        {!! Form::label('body_img', 'Body Image:', ['class' => 'col-lg-2 control-label']) !!}
+        <div class="col-lg-8">
+            {!! Form::file('image1') !!}
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-lg-10 col-lg-offset-2">
             {!! Form::button('Cancel', ['class' => 'btn btn-default', 'type' => 'reset']) !!}
             {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
