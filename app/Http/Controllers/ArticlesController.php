@@ -63,9 +63,15 @@ class ArticlesController extends Controller
         $new_article->body = $request->body;
         $new_article->save();
 
-        //dd($new_article->id);
-        if(Input::file('image') != null)
-            $this->uploadImage('image', $new_article->id, 'body_img');
+        // Save article title image
+        if(Input::file('title_img') != null)
+            $this->uploadImage('title_img', $new_article->id, 'title', 1066, 300);
+        // Save article body image
+        if(Input::file('body_img') != null)
+            $this->uploadImage('body_img', $new_article->id, 'body', 1066, 300);
+        // Save article icon
+        if(Input::file('article_icon_img') != null)
+            $this->uploadImage('article_icon_img', $new_article->id, 'title_icon', 100, 100);
 
         //
         $categories = Category::all();
@@ -136,12 +142,15 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Save images and related url in the image table
      * @param $image_name
      * @param $article_id
-     * @param $image_type
+     * @param $image_description
+     * @param $image_width
+     * @param $image_height
      * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function uploadImage($image_name, $article_id, $image_type){
+    public function uploadImage($image_name, $article_id, $image_description, $image_width, $image_height){
 
         // getting all of the post data
         $file = array('image' => Input::file($image_name));
@@ -158,16 +167,16 @@ class ArticlesController extends Controller
             // checking file is valid.
             if (Input::file($image_name)->isValid()) {
                 $extension = Input::file($image_name)->getClientOriginalExtension(); // getting image extension
-                $fileName = $article_id.$image_type.'.'.$extension; // rename image
+                $fileName = $article_id.$image_description.'.'.$extension; // rename image
 
                 /**
-                 * Image Manipulation using intervention image
+                 * Image description manipulation using intervention image
                  */
                 $img = Image::make(Input::file($image_name));
-                $img->resize(1066, null, function ($constraint) {
+                $img->resize($image_width, null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $img->crop(1000, 300, 0, 0);
+                $img->crop($image_width, $image_height, 0, 0);
                 $img->save(base_path().'/public/images/articles/'.$fileName);// uploading file to given path
 
                 /**
@@ -175,15 +184,16 @@ class ArticlesController extends Controller
                  */
                 $image_db = new HomeImage();
                 $image_db->article_id = $article_id;
+                $fileName = $article_id.$image_description.'.'.$extension; // rename image
                 $image_db->image_url = base_path().'/public/images/articles/'.$fileName;
                 $image_db->save();
-
 
                 // sending back with message
                 Session::flash('success', 'Upload successfully');
                 return redirect('articles/create');
             }
             else {
+                dd('here');
                 // sending back with error message.
                 Session::flash('error', 'uploaded file is not valid');
                 return redirect('articles/create');

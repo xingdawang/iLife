@@ -4,11 +4,13 @@
         @include('.categories.list_group')
     </div>
     <div class="col-lg-8">
-        {!! Html::image('images/articles/'.$article->id.'body_img.JPG', 'a picture')  !!}
+        {!! Html::image('images/articles/'.$article->id.'title.jpg', $article->title)  !!}
         <h1>{!! $article->title  !!}</h1>
         <article>
             <hr />
             <h4>
+                {!! Html::image('images/articles/'.$article->id.'body.jpg', $article->title)  !!}
+                <br />
                 {!! nl2br($article->body) !!}
             </h4>
         </article>
