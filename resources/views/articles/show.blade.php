@@ -12,9 +12,9 @@
         <article>
             <hr />
             <h4>
-                {!! Html::image('images/articles/'.$article->id.'body.jpg', $article->title)  !!}
-                <br />
                 {!! nl2br($article->body) !!}
+                <br />
+                {!! Html::image('images/articles/'.$article->id.'body.jpg', $article->title)  !!}
             </h4>
         </article>
         <hr />

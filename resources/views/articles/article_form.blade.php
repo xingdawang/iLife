@@ -24,21 +24,21 @@
         {!! Form::label('article_img', 'Article Image:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
             {!! Form::file('title_img') !!}
-            {!! Form::label('article_img', '(1066 px width preferred)') !!}
+            {!! Form::label('article_img', '(1035 px width preferred)') !!}
         </div>
     </div>
     <div class="form-group">
         {!! Form::label('body_img', 'Body Image:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
             {!! Form::file('body_img') !!}
-            {!! Form::label('article_img', '(1066 px width preferred)') !!}
+            {!! Form::label('article_img', '(1035 px width preferred)') !!}
         </div>
     </div>
     <div class="form-group">
         {!! Form::label('body_img', 'Body Image:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
             {!! Form::file('article_icon_img') !!}
-            {!! Form::label('article_icon_img', '(100 * 100 px width preferred)') !!}
+            {!! Form::label('article_icon_img', '(75 * 75 px width preferred)') !!}
         </div>
     </div>
     <div class="form-group">

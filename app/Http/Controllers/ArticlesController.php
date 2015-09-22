@@ -65,13 +65,13 @@ class ArticlesController extends Controller
 
         // Save article title image
         if(Input::file('title_img') != null)
-            $this->uploadImage('title_img', $new_article->id, 'title', 1066, 300);
+            $this->uploadImage('title_img', $new_article->id, 'title', 1035, 300);
         // Save article body image
         if(Input::file('body_img') != null)
-            $this->uploadImage('body_img', $new_article->id, 'body', 1066, 300);
+            $this->uploadImage('body_img', $new_article->id, 'body', 1035, 300);
         // Save article icon
         if(Input::file('article_icon_img') != null)
-            $this->uploadImage('article_icon_img', $new_article->id, 'title_icon', 100, 100);
+            $this->uploadImage('article_icon_img', $new_article->id, 'title_icon', 75, 75);
 
         //
         $categories = Category::all();
