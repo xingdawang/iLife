@@ -5,7 +5,10 @@
     </div>
     <div class="col-lg-8">
         {!! Html::image('images/articles/'.$article->id.'title.jpg', $article->title)  !!}
-        <h1>{!! $article->title  !!}</h1>
+        <h1>
+            {!! $article->title  !!}
+            @include('favorite_articles.store')
+        </h1>
         <article>
             <hr />
             <h4>

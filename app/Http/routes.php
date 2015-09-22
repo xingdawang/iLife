@@ -19,3 +19,4 @@ Route::controllers([
 Route::resource('categories', 'CategoriesController');
 Route::resource('articles', 'ArticlesController');
 Route::resource('comments', 'CommentsController');
+Route::resource('favorite_articles', 'FavoriteArticlesController');
