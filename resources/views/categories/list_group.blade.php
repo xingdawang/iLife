@@ -1,22 +1,9 @@
-<!--
-<ul class="list-group">
-    <li class="list-group-item">
-        <span class="badge">14</span>
-        Cras justo odio
-    </li>
-    <li class="list-group-item">
-        <span class="badge">2</span>
-        Dapibus ac facilisis in
-    </li>
-    <li class="list-group-item">
-        <span class="badge">1</span>
-        Morbi leo risus
-    </li>
--->
 <ul class="list-group">
 @foreach($categories as $category)
     <li class="list-group-item">
-        <a href=" {!! url('/categories', $category->id) !!}">{!! $category->name  !!}</a>
+            <a href=" {!! url('/categories', $category->id) !!}">{!! $category->name  !!}</a>
+            <span class="badge">{!! $articlesNumber[$category->id] !!}</span>
     </li>
+
 @endforeach
 </ul>

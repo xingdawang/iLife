@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use \App\Category;
 use App\Http\Requests\CategoriesFormRequest;
+use Illuminate\Support\Facades\DB;
 
 class CategoriesController extends Controller
 {
@@ -20,7 +21,8 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('categories.index', compact('categories'));
+        $articlesNumber = $this->getCategoryArticle();
+        return view('categories.index', compact('categories', 'articlesNumber'));
     }
 
     /**
@@ -43,7 +45,8 @@ class CategoriesController extends Controller
         //dd($request);
         Category::create($request->all());
         $categories = Category::all();
-        return view('categories.index', compact('categories'));
+        $articlesNumber = $this->getCategoryArticle();
+        return view('categories.index', compact('categories', 'articlesNumber'));
     }
 
     /**
@@ -57,7 +60,8 @@ class CategoriesController extends Controller
         $categories = Category::all();
         $category = Category::findOrFail($id);
         $articles = Article::where('category_id', '=', $category->id)->get();
-        return view('categories.show', compact('categories', 'category', 'articles'));
+        $articlesNumber = $this->getCategoryArticle();
+        return view('categories.show', compact('categories', 'category', 'articles', 'articlesNumber'));
     }
 
     /**
@@ -69,7 +73,8 @@ class CategoriesController extends Controller
     public function edit($id)
     {
         $category = Category::findOrFail($id);
-        return view('categories.edit', compact('category'));
+        $articlesNumber = $this->getCategoryArticle();
+        return view('categories.edit', compact('category', 'articlesNumber'));
     }
 
     /**
@@ -97,5 +102,20 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
         return redirect('categories');
+    }
+
+    public function getCategoryArticle(){
+        // get categories' articles
+        $article_numbers = DB::table('categories')
+            ->join('articles', 'categories.id', '=', 'articles.category_id')
+            ->groupBy('articles.category_id')
+            ->select('categories.id', DB::raw('COUNT(categories.id) as article_number'))
+            ->get();
+
+        // save the articles number in the array
+        $articles = [];
+        foreach($article_numbers as $article)
+            $articles[$article->id] = $article->article_number;
+        return $articles;
     }
 }
