@@ -51,17 +51,7 @@ class CommentsController extends Controller
             $new_comment->article_id = $request->article_id;
             $new_comment->body = $request->body;
             $new_comment->save();
-
-            //re-load page
-            $article = Article::findOrFail($request->article_id);
-            $categories = Category::all();
-            $comments = DB::table('comments')
-                ->join('users', 'users.id', '=', 'comments.user_id')
-                ->where('article_id', '=', $request->article_id)
-                ->orderBy('comments.created_at', 'desc')
-                ->select('comments.*', 'users.name')
-                ->get();
-            return view('articles.show', compact('categories','article','comments'));
+            return redirect()->route('articles.show',[$request->article_id]);
         } else{
             return redirect('auth\login');
         }

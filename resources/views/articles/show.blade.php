@@ -14,6 +14,7 @@
             <h4>
                 {!! nl2br($article->body) !!}
                 <br />
+                <hr />
                 {!! Html::image('images/articles/'.$article->id.'body.jpg', $article->title)  !!}
             </h4>
         </article>

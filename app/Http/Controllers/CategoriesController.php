@@ -104,7 +104,7 @@ class CategoriesController extends Controller
         return redirect('categories');
     }
 
-    public function getCategoryArticle(){
+    public static function getCategoryArticle(){
         // get categories' articles
         $article_numbers = DB::table('categories')
             ->join('articles', 'categories.id', '=', 'articles.category_id')

@@ -26,7 +26,8 @@ class FavoriteArticlesController extends Controller
             ->where('favorite_articles.user_id', '=', Auth::user()->id)
             ->select('favorite_articles.*', 'articles.title')
             ->get();
-        return view('favorite_articles.index', compact('categories', 'favorites_list'));
+        $articlesNumber = CategoriesController::getCategoryArticle();
+        return view('favorite_articles.index', compact('categories', 'favorites_list','articlesNumber'));
     }
 
     /**

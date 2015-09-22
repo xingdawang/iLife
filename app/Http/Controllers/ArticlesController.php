@@ -32,8 +32,8 @@ class ArticlesController extends Controller
     {
         $categories = Category::all();
         $articles = Article::all();
-
-        return view('articles.index', compact('categories', 'articles'));
+        $articlesNumber = CategoriesController::getCategoryArticle();
+        return view('articles.index', compact('categories', 'articles', 'articlesNumber'));
     }
 
     /**
@@ -45,7 +45,8 @@ class ArticlesController extends Controller
     {
         $categories = Category::all();
         $category_list = Category::lists('name', 'id');
-        return view('articles.create', compact('categories', 'category_list'));
+        $articlesNumber = CategoriesController::getCategoryArticle();
+        return view('articles.create', compact('categories', 'category_list', 'articlesNumber'));
     }
 
     /**
@@ -76,7 +77,8 @@ class ArticlesController extends Controller
         //
         $categories = Category::all();
         $articles = Article::all();
-        return view('articles.index', compact('categories', 'articles'));
+        $articlesNumber = CategoriesController::getCategoryArticle();
+        return view('articles.index', compact('categories', 'articles', 'articlesNumber'));
     }
 
     /**
@@ -95,8 +97,10 @@ class ArticlesController extends Controller
             ->orderBy('comments.created_at', 'desc')
             ->select('comments.*', 'users.name')
             ->get();
-        //dd($comments);
-        return view('articles.show', compact('categories','article', 'comments'));
+        //find image path
+
+        $articlesNumber = CategoriesController::getCategoryArticle();
+        return view('articles.show', compact('categories','article', 'comments', 'articlesNumber'));
     }
 
     /**
@@ -110,7 +114,8 @@ class ArticlesController extends Controller
         $categories = Category::all();
         $category_list = Category::lists('name', 'id');
         $article = Article::findOrFail($id);
-        return view('articles.edit', compact('categories', 'category_list', 'article'));
+        $articlesNumber = CategoriesController::getCategoryArticle();
+        return view('articles.edit', compact('categories', 'category_list', 'article', 'articlesNumber'));
     }
 
     /**
