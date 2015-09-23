@@ -15,4 +15,7 @@
         </div>
     </div>
 </fieldset>
+
+<div style="height: 100px">
+</div>
 {!! Form::close() !!}

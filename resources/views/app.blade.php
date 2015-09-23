@@ -54,9 +54,10 @@
 			</div>
 		</div>
 	</nav>
-	@yield('content')
+		@yield('content')
+
 	<footer class="footer">
-		<div class="container" align="center">
+		<div class="container" align="center" >
 			<a href="{!! url('privacy') !!}">Privacy</a> |
 			<a href="{!! url('about_us') !!}">About us</a> |
 			<a href="{!! url('feedback') !!}">Feedback</a>

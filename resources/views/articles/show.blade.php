@@ -22,4 +22,5 @@
         @include('comments.show')
         @include('comments.create')
     </div>
+
 @stop
