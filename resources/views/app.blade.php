@@ -7,6 +7,7 @@
 	<title>Laravel</title>
 
 	<link href="{{ asset('/css/bootstap.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('/css/sticky-footer.css') }}" rel="stylesheet">
 
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
@@ -53,8 +54,14 @@
 			</div>
 		</div>
 	</nav>
-
 	@yield('content')
+	<footer class="footer">
+		<div class="container" align="center">
+			<a href="{!! url('privacy') !!}">Privacy</a> |
+			<a href="{!! url('about_us') !!}">About us</a> |
+			<a href="{!! url('feedback') !!}">Feedback</a>
+		</div>
+	</footer>
 
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

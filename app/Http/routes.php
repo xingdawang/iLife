@@ -21,3 +21,7 @@ Route::resource('articles', 'ArticlesController');
 Route::resource('comments', 'CommentsController');
 Route::resource('favorite_articles', 'FavoriteArticlesController');
 Route::resource('article_images', 'ImagesController');
+Route::get('privacy','FooterController@showPrivacy');
+Route::get('about_us','FooterController@aboutUs');
+Route::get('feedback', 'FooterController@feedback');
+Route::post('feedback_email',['as'=>'feedback_email', 'uses' => 'FooterController@feedback_email']);

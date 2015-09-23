@@ -1,0 +1,5 @@
+Delicious recipes, practical tools, and life-giving encouragement that will inspire you to get healthy for life!
+
+Welcome to Dashing Dish! My name is Katie Farrell, and I'm the founder of Dashing Dish, a place to find not only wholesome and simple recipes, but encouragement, inspiration, and motivation for your journey to get fit for life. At Dashing Dish, it is truly my greatest heart's desire to help others find encouragement and fulfillment through a balance of healthy living principals and God's Word. I will teach you how to make easy healthy meals, and provide practical encouragement to nourish both your body and soul.
+
+I also share ideas and techniques from my personal experience of getting in shape and doing it God's way. Dashing Dish is created to inspire you to get fit and healthy for life, all while enjoying the journey!
