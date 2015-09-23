@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'wxd598113636@gmail.com', 'name' => null],
+    'from' => ['address' => 'feedback@ilife.ie', 'name' => null],
 
     /*
     |--------------------------------------------------------------------------
