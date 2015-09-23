@@ -4,6 +4,5 @@
             <a href=" {!! url('/categories', $category->id) !!}">{!! $category->name  !!}</a>
             <span class="badge">{!! $articlesNumber[$category->id] !!}</span>
     </li>
-
 @endforeach
 </ul>

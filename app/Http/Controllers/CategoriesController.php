@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use \App\Category;
 use App\Http\Requests\CategoriesFormRequest;
 use Illuminate\Support\Facades\DB;
+use App\Image as HomeImage;
 
 class CategoriesController extends Controller
 {
@@ -22,6 +23,9 @@ class CategoriesController extends Controller
     {
         $categories = Category::all();
         $articlesNumber = $this->getCategoryArticle();
+        // if there is no article, set the article number to 0
+        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+//        dd($articlesNumber);
         return view('categories.index', compact('categories', 'articlesNumber'));
     }
 
@@ -46,6 +50,8 @@ class CategoriesController extends Controller
         Category::create($request->all());
         $categories = Category::all();
         $articlesNumber = $this->getCategoryArticle();
+        // if there is no article, set the article number to 0
+        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
         return view('categories.index', compact('categories', 'articlesNumber'));
     }
 
@@ -61,7 +67,16 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($id);
         $articles = Article::where('category_id', '=', $category->id)->get();
         $articlesNumber = $this->getCategoryArticle();
-        return view('categories.show', compact('categories', 'category', 'articles', 'articlesNumber'));
+        // if there is no article, set the article number to 0
+        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        // Get all articles icon
+//        $images_list = [];
+//        foreach($articles as $article) {
+//            $images_list[] = HomeImage::where('article_id', '=', $article->id)->get();
+//        }
+//        dd($images_list);
+        $images = HomeImage::all();
+        return view('categories.show', compact('categories', 'category', 'articles', 'articlesNumber','images'));
     }
 
     /**

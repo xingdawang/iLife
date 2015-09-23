@@ -4,7 +4,11 @@
             <li>
                 <h3>
                     <a href="{!! url('articles', $article->id) !!}">
-                        {!! Html::image('images/articles/'.$article->id.'title_icon.png', $article->title)  !!}
+                        @foreach($images as $image)
+                            @if($image->id  ==  $article->id * 3)
+                                {!! Html::image($image->image_url, $article->title)  !!}
+                            @endif
+                        @endforeach
                         &nbsp;
                         {!! $article->title !!}
                     </a>

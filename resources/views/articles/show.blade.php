@@ -4,7 +4,7 @@
         @include('.categories.list_group')
     </div>
     <div class="col-lg-8">
-        {!! Html::image('images/articles/'.$article->id.'title.jpg', $article->title)  !!}
+        {!! Html::image($images[0]->image_url, $article->title)  !!}
         <h1>
             {!! $article->title  !!}
             @include('favorite_articles.store')
@@ -15,7 +15,7 @@
                 {!! nl2br($article->body) !!}
                 <br />
                 <hr />
-                {!! Html::image('images/articles/'.$article->id.'body.jpg', $article->title)  !!}
+                {!! Html::image($images[1]->image_url, $article->title)  !!}
             </h4>
         </article>
         <hr />

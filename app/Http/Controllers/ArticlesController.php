@@ -33,7 +33,11 @@ class ArticlesController extends Controller
         $categories = Category::all();
         $articles = Article::all();
         $articlesNumber = CategoriesController::getCategoryArticle();
-        return view('articles.index', compact('categories', 'articles', 'articlesNumber'));
+        // if there is no article, set the article number to 0
+        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        $images = HomeImage::all();
+        //dd($articlesNumber);
+        return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images'));
     }
 
     /**
@@ -46,6 +50,8 @@ class ArticlesController extends Controller
         $categories = Category::all();
         $category_list = Category::lists('name', 'id');
         $articlesNumber = CategoriesController::getCategoryArticle();
+        // if there is no article, set the article number to 0
+        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
         return view('articles.create', compact('categories', 'category_list', 'articlesNumber'));
     }
 
@@ -98,9 +104,11 @@ class ArticlesController extends Controller
             ->select('comments.*', 'users.name')
             ->get();
         //find image path
-
+        $images = HomeImage::where('article_id', '=', $id)->get();
         $articlesNumber = CategoriesController::getCategoryArticle();
-        return view('articles.show', compact('categories','article', 'comments', 'articlesNumber'));
+        // if there is no article, set the article number to 0
+        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        return view('articles.show', compact('categories','article', 'comments', 'articlesNumber', 'images'));
     }
 
     /**
@@ -190,7 +198,7 @@ class ArticlesController extends Controller
                 $image_db = new HomeImage();
                 $image_db->article_id = $article_id;
                 $fileName = $article_id.$image_description.'.'.$extension; // rename image
-                $image_db->image_url = base_path().'/public/images/articles/'.$fileName;
+                $image_db->image_url = 'images/articles/'.$fileName;
                 $image_db->save();
 
                 // sending back with message
