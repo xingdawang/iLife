@@ -84,7 +84,8 @@ class ArticlesController extends Controller
         $categories = Category::all();
         $articles = Article::all();
         $articlesNumber = CategoriesController::getCategoryArticle();
-        return view('articles.index', compact('categories', 'articles', 'articlesNumber'));
+        $images = HomeImage::all();
+        return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images'));
     }
 
     /**
