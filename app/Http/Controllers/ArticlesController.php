@@ -20,7 +20,7 @@ class ArticlesController extends Controller
      *
      */
     public function __construct(){
-        $this->middleware('auth', ['only' => 'create']);
+        $this->middleware('manager', ['only' => ['create', 'edit']]);
     }
 
     /**
@@ -124,6 +124,7 @@ class ArticlesController extends Controller
         $category_list = Category::lists('name', 'id');
         $article = Article::findOrFail($id);
         $articlesNumber = CategoriesController::getCategoryArticle();
+        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
         return view('articles.edit', compact('categories', 'category_list', 'article', 'articlesNumber'));
     }
 
