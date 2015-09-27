@@ -14,64 +14,31 @@ use App\User;
 class FooterController extends Controller
 {
     public function showPrivacy(){
-        $categories = Category::all();
-        $articles = Article::all();
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        if(User::getCurrentUser() != null)
-            $is_manager = User::getCurrentUser()->is_manager;
-        else
-            $is_manager = false;
+        $loader = $this->loadCategory();
         $content = 'footer.privacy_content';
-        return view('/footer/footer', compact('categories', 'articles', 'articlesNumber', 'images', 'content', 'is_manager'));
+        $loader['content'] = $content;
+        return view('/footer/footer', $loader);
     }
 
     public function aboutUs(){
-        $categories = Category::all();
-        $articles = Article::all();
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        $images = HomeImage::all();
+        $loader = $this->loadCategory();
         $content = 'footer.about_us';
-        if(User::getCurrentUser() != null)
-            $is_manager = User::getCurrentUser()->is_manager;
-        else
-            $is_manager = false;
-        return view('/footer/footer', compact('categories', 'articles', 'articlesNumber', 'images', 'content', 'is_manager'));
+        $loader['content'] = $content;
+        return view('/footer/footer', $loader);
     }
 
     public function feedback(){
-        $categories = Category::all();
-        $articles = Article::all();
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        $images = HomeImage::all();
+        $loader = $this->loadCategory();
         $content = 'footer.feedback';
-        if(User::getCurrentUser() != null)
-            $is_manager = User::getCurrentUser()->is_manager;
-        else
-            $is_manager = false;
-        return view('/footer/footer', compact('categories', 'articles', 'articlesNumber', 'images', 'content', 'is_manager'));
+        $loader['content'] = $content;
+        return view('/footer/footer', $loader);
     }
 
+    /**
+     * Show feedback email
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function feedback_email(Request $request){
 
         $categories = Category::all();
@@ -102,5 +69,23 @@ class FooterController extends Controller
         });
         return view('/footer/feedback_review',
             compact('categories', 'articlesNumber', 'feedback_title', 'feedback_body', 'is_manager'));
+    }
+
+    public function loadCategory(){
+        $categories = Category::all();
+        $articles = Article::all();
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
+        return compact('categories', 'articles', 'articlesNumber', 'images', 'is_manager');
     }
 }

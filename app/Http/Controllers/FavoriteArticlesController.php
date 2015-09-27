@@ -13,6 +13,10 @@ use App\User;
 
 class FavoriteArticlesController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,23 +24,8 @@ class FavoriteArticlesController extends Controller
      */
     public function index()
     {
-        // check user login here!
-        $categories = Category::all();
-        $favorites_list = DB::table('favorite_articles')
-            ->join('articles', 'articles.id', '=', 'favorite_articles.article_id')
-            ->where('favorite_articles.user_id', '=', Auth::user()->id)
-            ->select('favorite_articles.*', 'articles.title')
-            ->get();
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        $is_manager = User::getCurrentUser()->is_manager;
-        return view('favorite_articles.index', compact('categories', 'favorites_list','articlesNumber', 'is_manager'));
+        $loader = $this->loadCategory();
+        return view('favorite_articles.index', $loader);
     }
 
     /**
@@ -57,21 +46,16 @@ class FavoriteArticlesController extends Controller
      */
     public function store(Request $request)
     {
-        if(Auth::check()){
-
-            // Check whether the article has already been liked
-            if(Favorite_article::where('user_id', '=', Auth::user()->id)
-            ->where('article_id', '=', $request->article_id)->count() < 1) {
-                $favorite_artile = new Favorite_article();
-                $favorite_artile->article_id = $request->article_id;
-                $favorite_artile->user_id = Auth::user()->id;
-                $favorite_artile->save();
-                return redirect()->route('articles.show',[$request->article_id]);
-            } else{
-                dd('give a message that it has already been liked');
-            }
+        // Check whether the article has already been liked
+        if(Favorite_article::where('user_id', '=', Auth::user()->id)
+                ->where('article_id', '=', $request->article_id)->count() < 1) {
+            $favorite_artile = new Favorite_article();
+            $favorite_artile->article_id = $request->article_id;
+            $favorite_artile->user_id = Auth::user()->id;
+            $favorite_artile->save();
+            return redirect()->route('articles.show',[$request->article_id]);
         } else{
-            return redirect('auth/login');
+            return redirect()->route('articles.show',[$request->article_id]);
         }
     }
 
@@ -122,5 +106,24 @@ class FavoriteArticlesController extends Controller
         $deleted_favorite_article->delete();
         return redirect('favorite_articles');
 
+    }
+
+    public function loadCategory(){
+        $categories = Category::all();
+        $favorites_list = DB::table('favorite_articles')
+            ->join('articles', 'articles.id', '=', 'favorite_articles.article_id')
+            ->where('favorite_articles.user_id', '=', Auth::user()->id)
+            ->select('favorite_articles.*', 'articles.title')
+            ->get();
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        $is_manager = User::getCurrentUser()->is_manager;
+        return compact('categories', 'favorites_list','articlesNumber', 'is_manager');
     }
 }

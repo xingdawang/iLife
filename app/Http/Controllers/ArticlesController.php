@@ -32,22 +32,8 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        $articles = Article::all();
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        $images = HomeImage::all();
-        if(User::getCurrentUser() != null)
-            $is_manager = User::getCurrentUser()->is_manager;
-        else
-            $is_manager = false;
-        return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images', 'is_manager'));
+        $loader = $this->loadCategory();
+        return view('articles.index', $loader);
     }
 
     /**
@@ -57,21 +43,8 @@ class ArticlesController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $category_list = Category::lists('name', 'id');
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        if(User::getCurrentUser() != null)
-            $is_manager = User::getCurrentUser()->is_manager;
-        else
-            $is_manager = false;
-        return view('articles.create', compact('categories', 'category_list', 'articlesNumber', 'is_manager'));
+        $loader = $this->loadCategory();
+        return view('articles.create', $loader);
     }
 
     /**
@@ -99,23 +72,8 @@ class ArticlesController extends Controller
         if(Input::file('article_icon_img') != null)
             $this->uploadImage('article_icon_img', $new_article->id, 'title_icon', 75, 75);
 
-        //
-        $categories = Category::all();
-        $articles = Article::all();
-        $images = HomeImage::all();
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        if(User::getCurrentUser() != null)
-            $is_manager = User::getCurrentUser()->is_manager;
-        else
-            $is_manager = false;
-        return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images', 'is_manager'));
+        $loader = $this->loadCategory();
+        return view('articles.index', $loader);
     }
 
     /**
@@ -126,25 +84,8 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
-        $article = Article::findOrFail($id);
-        $categories = Category::all();
-//        dd(CommentsController());
-        $comments = CommentsController::show($id);
-        //find image path
-        $images = HomeImage::where('article_id', '=', $id)->get();
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        if(User::getCurrentUser() != null)
-            $is_manager = User::getCurrentUser()->is_manager;
-        else
-            $is_manager = false;
-        return view('articles.show', compact('categories','article', 'comments', 'articlesNumber', 'images', 'is_manager'));
+        $loader = $this->loadCategoryWithId($id);
+        return view('articles.show', $loader);
     }
 
     /**
@@ -155,22 +96,8 @@ class ArticlesController extends Controller
      */
     public function edit($id)
     {
-        $categories = Category::all();
-        $category_list = Category::lists('name', 'id');
-        $article = Article::findOrFail($id);
-        // link the category id and the its related articles
-        $articlesNumber = [];
-        foreach($categories as $category){
-            if(CategoriesController::getArticleNumber($category->id) != null)
-                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
-            else
-                $articlesNumber[$category->id] = '0';
-        }
-        if(User::getCurrentUser() != null)
-            $is_manager = User::getCurrentUser()->is_manager;
-        else
-            $is_manager = false;
-        return view('articles.edit', compact('categories', 'category_list', 'article', 'articlesNumber', 'is_manager'));
+        $loader = $this->loadCategoryWithId($id);
+        return view('articles.edit', $loader);
     }
 
     /**
@@ -259,5 +186,50 @@ class ArticlesController extends Controller
                 return redirect('articles/create');
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function loadCategory(){
+        $categories = Category::all();
+        $articles = Article::all();
+        $category_list = Category::lists('name', 'id');
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        $images = HomeImage::all();
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
+        return compact('categories', 'category_list', 'articles', 'articlesNumber', 'images', 'is_manager');
+    }
+
+    public function loadCategoryWithId($id){
+        $categories = Category::all();
+        $category_list = Category::lists('name', 'id');
+        $article = Article::findOrFail($id);
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
+        //find image path
+        $images = HomeImage::where('article_id', '=', $id)->get();
+        $comments = CommentsController::show($id);
+        return compact('categories', 'category_list', 'article', 'articlesNumber', 'is_manager', 'images', 'comments');
     }
 }

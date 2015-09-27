@@ -100,10 +100,6 @@ class CommentsController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-//        $article = Article::findOrFail($id);
-//        $article->delete();
-//        return redirect('articles');
-//        dd($request);
         $comment = Comment::findOrFail($id);
         $comment->delete();
         return redirect()->route('articles.show',[$request->article_id]);
