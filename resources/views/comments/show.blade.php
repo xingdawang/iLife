@@ -2,7 +2,10 @@
     @foreach($comments as $comment)
         <div class="panel panel-info">
             <div class="panel-body">
-                {!! $comment->name !!} ( {!! $comment->created_at!!} ): {!!  $comment->body !!}
+                <strong>{!! $comment->name !!} ( {!! $comment->created_at!!} ): </strong><br>{!!  nl2br($comment->body) !!}
+                @if($is_manager)
+                    @include('comments.delete')
+                @endif
             </div>
         </div>
     @endforeach

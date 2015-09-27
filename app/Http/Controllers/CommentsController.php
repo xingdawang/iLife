@@ -60,13 +60,18 @@ class CommentsController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $article_id
+     * @return mixed
      */
-    public function show($id)
+    public static function show($article_id)
     {
-
+        $comments = DB::table('comments')
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->where('article_id', '=', $article_id)
+            ->orderBy('comments.created_at', 'desc')
+            ->select('comments.*', 'users.name')
+            ->get();
+        return $comments;
     }
 
     /**
@@ -98,8 +103,14 @@ class CommentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+//        $article = Article::findOrFail($id);
+//        $article->delete();
+//        return redirect('articles');
+//        dd($request);
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+        return redirect()->route('articles.show',[$request->article_id]);
     }
 }

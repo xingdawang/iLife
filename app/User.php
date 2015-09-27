@@ -48,4 +48,8 @@ class User extends Model implements AuthenticatableContract,
     public function isManager(){
         return $this->is_manager;
     }
+
+    public static function getCurrentUser(){
+        return auth()->user();
+    }
 }

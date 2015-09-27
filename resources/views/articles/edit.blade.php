@@ -13,5 +13,14 @@
             ]) !!}
         @include('articles.article_form')
         {!! Form::close() !!}
+        <hr>
+        {!! Form::open([
+            'method' => 'DELETE',
+            'action' => ['ArticlesController@destroy', $article->id]
+        ]) !!}
+        <div align="right">
+            {!! Form::submit('Delete', ['class' => 'btn btn-primary'], $article->id) !!}
+        </div>
+        {!! Form::close() !!}
     </div>
 @stop

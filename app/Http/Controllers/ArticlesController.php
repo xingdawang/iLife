@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Category;
+use App\Comment;
 use App\Image as HomeImage;
+use App\User;
 use DB;
 use Input;
 use Validator;
@@ -32,13 +34,18 @@ class ArticlesController extends Controller
     {
         $categories = Category::all();
         $articles = Article::all();
-        $articlesNumber = CategoriesController::getCategoryArticle();
-        // if there is no article, set the article number to 0
-        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
-            $articlesNumber[$i] = '0';
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
         $images = HomeImage::all();
         //dd($articlesNumber);
-        return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images'));
+        $is_manager = User::getCurrentUser()->is_manager;
+        return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images', 'is_manager'));
     }
 
     /**
@@ -100,19 +107,20 @@ class ArticlesController extends Controller
     {
         $article = Article::findOrFail($id);
         $categories = Category::all();
-        $comments = DB::table('comments')
-            ->join('users', 'users.id', '=', 'comments.user_id')
-            ->where('article_id', '=', $id)
-            ->orderBy('comments.created_at', 'desc')
-            ->select('comments.*', 'users.name')
-            ->get();
+//        dd(CommentsController());
+        $comments = CommentsController::show($id);
         //find image path
         $images = HomeImage::where('article_id', '=', $id)->get();
-        $articlesNumber = CategoriesController::getCategoryArticle();
-        // if there is no article, set the article number to 0
-        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
-            $articlesNumber[$i] = '0';
-        return view('articles.show', compact('categories','article', 'comments', 'articlesNumber', 'images'));
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        $is_manager = User::getCurrentUser()->is_manager;
+        return view('articles.show', compact('categories','article', 'comments', 'articlesNumber', 'images', 'is_manager'));
     }
 
     /**
@@ -126,11 +134,16 @@ class ArticlesController extends Controller
         $categories = Category::all();
         $category_list = Category::lists('name', 'id');
         $article = Article::findOrFail($id);
-        $articlesNumber = CategoriesController::getCategoryArticle();
-        // if there is no article, set the article number to 0
-        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
-            $articlesNumber[$i] = '0';
-        return view('articles.edit', compact('categories', 'category_list', 'article', 'articlesNumber'));
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        $is_manager = User::getCurrentUser()->is_manager;
+        return view('articles.edit', compact('categories', 'category_list', 'article', 'articlesNumber', 'is_manager'));
     }
 
     /**

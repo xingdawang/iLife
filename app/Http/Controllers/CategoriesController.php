@@ -28,7 +28,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::all();
-        // if there is no article, set the article number to 0
+        // link the category id and the its related articles
         $articlesNumber = [];
         foreach($categories as $category){
             if($this->getArticleNumber($category->id) != null)
@@ -37,7 +37,7 @@ class CategoriesController extends Controller
                 $articlesNumber[$category->id] = '0';
         }
 //        dd($articlesNumber);
-        $is_manager = $this->getCurrentUser()->is_manager;
+        $is_manager = User::getCurrentUser()->is_manager;
         return view('categories.index', compact('categories', 'articlesNumber', 'is_manager'));
     }
 
@@ -93,7 +93,7 @@ class CategoriesController extends Controller
                 $articlesNumber[$category->id] = '0';
         }
         $images = HomeImage::all();
-        $is_manager = $this->getCurrentUser()->is_manager;
+        $is_manager = User::getCurrentUser()->is_manager;
         return view('categories.show', compact('categories', 'category', 'articles', 'articlesNumber','images', 'is_manager'));
     }
 
@@ -152,7 +152,7 @@ class CategoriesController extends Controller
         return $articles;
     }
 
-    public function getArticleNumber($id){
+    public static function getArticleNumber($id){
         // get categories' articles
         $article_number = DB::table('categories')
             ->join('articles', 'categories.id', '=', 'articles.category_id')
@@ -160,11 +160,6 @@ class CategoriesController extends Controller
             ->select('categories.id', DB::raw('COUNT(categories.id) as article_number'))
             ->where('categories.id', '=', $id)
             ->get();
-
         return $article_number;
-    }
-
-    public function getCurrentUser(){
-        return auth()->user();
     }
 }

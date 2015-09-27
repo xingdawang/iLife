@@ -9,7 +9,13 @@
             {!! $article->title  !!}
             @include('favorite_articles.store')
         </h1>
+
         <article>
+            @if($is_manager)
+                <a href={!! url('articles/'. $article->id.'/edit') !!}>
+                    <h3><font color="red">Edit</font></h3>
+                </a>
+            @endif
             <hr />
             <h4>
                 {!! nl2br($article->body) !!}

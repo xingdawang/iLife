@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="form-group">
-        {!! Form::label('body_img', 'Body Image:', ['class' => 'col-lg-2 control-label']) !!}
+        {!! Form::label('icon_img', 'Icon Image:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
             {!! Form::file('article_icon_img') !!}
             {!! Form::label('article_icon_img', '(75 * 75 px width preferred)') !!}

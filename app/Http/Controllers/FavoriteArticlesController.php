@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\User;
 
 class FavoriteArticlesController extends Controller
 {
@@ -26,11 +27,16 @@ class FavoriteArticlesController extends Controller
             ->where('favorite_articles.user_id', '=', Auth::user()->id)
             ->select('favorite_articles.*', 'articles.title')
             ->get();
-        $articlesNumber = CategoriesController::getCategoryArticle();
-        // if there is no article, set the article number to 0
-        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
-            $articlesNumber[$i] = '0';
-        return view('favorite_articles.index', compact('categories', 'favorites_list','articlesNumber'));
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        $is_manager = User::getCurrentUser()->is_manager;
+        return view('favorite_articles.index', compact('categories', 'favorites_list','articlesNumber', 'is_manager'));
     }
 
     /**
