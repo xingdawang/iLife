@@ -28,10 +28,15 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $articlesNumber = $this->getCategoryArticle();
         // if there is no article, set the article number to 0
-        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
-            $articlesNumber[$i] = '0';
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if($this->getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = $this->getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+//        dd($articlesNumber);
         $is_manager = $this->getCurrentUser()->is_manager;
         return view('categories.index', compact('categories', 'articlesNumber', 'is_manager'));
     }
@@ -56,11 +61,16 @@ class CategoriesController extends Controller
         //dd($request);
         Category::create($request->all());
         $categories = Category::all();
-        $articlesNumber = $this->getCategoryArticle();
         // if there is no article, set the article number to 0
-        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
-            $articlesNumber[$i] = '0';
-        return view('categories.index', compact('categories', 'articlesNumber'));
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if($this->getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = $this->getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        $is_manager = $this->getCurrentUser()->is_manager;
+        return view('categories.index', compact('categories', 'articlesNumber', 'is_manager'));
     }
 
     /**
@@ -74,18 +84,17 @@ class CategoriesController extends Controller
         $categories = Category::all();
         $category = Category::findOrFail($id);
         $articles = Article::where('category_id', '=', $category->id)->get();
-        $articlesNumber = $this->getCategoryArticle();
         // if there is no article, set the article number to 0
-        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
-            $articlesNumber[$i] = '0';
-        // Get all articles icon
-//        $images_list = [];
-//        foreach($articles as $article) {
-//            $images_list[] = HomeImage::where('article_id', '=', $article->id)->get();
-//        }
-//        dd($images_list);
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if($this->getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = $this->getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
         $images = HomeImage::all();
-        return view('categories.show', compact('categories', 'category', 'articles', 'articlesNumber','images'));
+        $is_manager = $this->getCurrentUser()->is_manager;
+        return view('categories.show', compact('categories', 'category', 'articles', 'articlesNumber','images', 'is_manager'));
     }
 
     /**
@@ -141,6 +150,18 @@ class CategoriesController extends Controller
         foreach($article_numbers as $article)
             $articles[$article->id] = $article->article_number;
         return $articles;
+    }
+
+    public function getArticleNumber($id){
+        // get categories' articles
+        $article_number = DB::table('categories')
+            ->join('articles', 'categories.id', '=', 'articles.category_id')
+            ->groupBy('articles.category_id')
+            ->select('categories.id', DB::raw('COUNT(categories.id) as article_number'))
+            ->where('categories.id', '=', $id)
+            ->get();
+
+        return $article_number;
     }
 
     public function getCurrentUser(){
