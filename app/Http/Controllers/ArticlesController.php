@@ -43,8 +43,10 @@ class ArticlesController extends Controller
                 $articlesNumber[$category->id] = '0';
         }
         $images = HomeImage::all();
-        //dd($articlesNumber);
-        $is_manager = User::getCurrentUser()->is_manager;
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
         return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images', 'is_manager'));
     }
 
@@ -57,11 +59,19 @@ class ArticlesController extends Controller
     {
         $categories = Category::all();
         $category_list = Category::lists('name', 'id');
-        $articlesNumber = CategoriesController::getCategoryArticle();
-        // if there is no article, set the article number to 0
-        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
-            $articlesNumber[$i] = '0';
-        return view('articles.create', compact('categories', 'category_list', 'articlesNumber'));
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
+        return view('articles.create', compact('categories', 'category_list', 'articlesNumber', 'is_manager'));
     }
 
     /**
@@ -92,9 +102,20 @@ class ArticlesController extends Controller
         //
         $categories = Category::all();
         $articles = Article::all();
-        $articlesNumber = CategoriesController::getCategoryArticle();
         $images = HomeImage::all();
-        return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images'));
+        // link the category id and the its related articles
+        $articlesNumber = [];
+        foreach($categories as $category){
+            if(CategoriesController::getArticleNumber($category->id) != null)
+                $articlesNumber[$category->id] = CategoriesController::getArticleNumber($category->id)[0]->article_number;
+            else
+                $articlesNumber[$category->id] = '0';
+        }
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
+        return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images', 'is_manager'));
     }
 
     /**
@@ -119,7 +140,10 @@ class ArticlesController extends Controller
             else
                 $articlesNumber[$category->id] = '0';
         }
-        $is_manager = User::getCurrentUser()->is_manager;
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
         return view('articles.show', compact('categories','article', 'comments', 'articlesNumber', 'images', 'is_manager'));
     }
 
@@ -142,7 +166,10 @@ class ArticlesController extends Controller
             else
                 $articlesNumber[$category->id] = '0';
         }
-        $is_manager = User::getCurrentUser()->is_manager;
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
         return view('articles.edit', compact('categories', 'category_list', 'article', 'articlesNumber', 'is_manager'));
     }
 

@@ -15,5 +15,8 @@
                 </h3>
             </li>
         @endforeach
+        @if($is_manager)
+                <a href={!! url('articles/create') !!}><h2><font color="purple">Create a new article</font></h2></a>
+            @endif
     </ul>
 </div>

@@ -36,8 +36,10 @@ class CategoriesController extends Controller
             else
                 $articlesNumber[$category->id] = '0';
         }
-//        dd($articlesNumber);
-        $is_manager = User::getCurrentUser()->is_manager;
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
         return view('categories.index', compact('categories', 'articlesNumber', 'is_manager'));
     }
 
@@ -69,7 +71,10 @@ class CategoriesController extends Controller
             else
                 $articlesNumber[$category->id] = '0';
         }
-        $is_manager = $this->getCurrentUser()->is_manager;
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
         return view('categories.index', compact('categories', 'articlesNumber', 'is_manager'));
     }
 
@@ -93,7 +98,10 @@ class CategoriesController extends Controller
                 $articlesNumber[$category->id] = '0';
         }
         $images = HomeImage::all();
-        $is_manager = User::getCurrentUser()->is_manager;
+        if(User::getCurrentUser() != null)
+            $is_manager = User::getCurrentUser()->is_manager;
+        else
+            $is_manager = false;
         return view('categories.show', compact('categories', 'category', 'articles', 'articlesNumber','images', 'is_manager'));
     }
 

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class CommentsController extends Controller
 {
     public function __construct(){
-        //$this->middleware('auth', ['only' => 'create']);
+        $this->middleware('auth', ['only' => 'create']);
     }
 
     /**
@@ -45,17 +45,12 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::check()) {
-            $new_comment = new Comment();
-            $new_comment->user_id = Auth::user()->id;
-            $new_comment->article_id = $request->article_id;
-            $new_comment->body = $request->body;
-            $new_comment->save();
-            return redirect()->route('articles.show',[$request->article_id]);
-        } else{
-            return redirect('auth\login');
-        }
-
+        $new_comment = new Comment();
+        $new_comment->user_id = Auth::user()->id;
+        $new_comment->article_id = $request->article_id;
+        $new_comment->body = $request->body;
+        $new_comment->save();
+        return redirect()->route('articles.show',[$request->article_id]);
     }
 
     /**
