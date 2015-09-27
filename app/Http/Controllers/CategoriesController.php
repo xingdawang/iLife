@@ -3,17 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use \App\Category;
 use App\Http\Requests\CategoriesFormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Image as HomeImage;
 
 class CategoriesController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('manager', ['except' => ['index', 'show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,9 +30,10 @@ class CategoriesController extends Controller
         $categories = Category::all();
         $articlesNumber = $this->getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
-//        dd($articlesNumber);
-        return view('categories.index', compact('categories', 'articlesNumber'));
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
+        $is_manager = $this->getCurrentUser()->is_manager;
+        return view('categories.index', compact('categories', 'articlesNumber', 'is_manager'));
     }
 
     /**
@@ -51,7 +58,8 @@ class CategoriesController extends Controller
         $categories = Category::all();
         $articlesNumber = $this->getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         return view('categories.index', compact('categories', 'articlesNumber'));
     }
 
@@ -68,7 +76,8 @@ class CategoriesController extends Controller
         $articles = Article::where('category_id', '=', $category->id)->get();
         $articlesNumber = $this->getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         // Get all articles icon
 //        $images_list = [];
 //        foreach($articles as $article) {
@@ -132,5 +141,9 @@ class CategoriesController extends Controller
         foreach($article_numbers as $article)
             $articles[$article->id] = $article->article_number;
         return $articles;
+    }
+
+    public function getCurrentUser(){
+        return auth()->user();
     }
 }

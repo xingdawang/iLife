@@ -34,7 +34,8 @@ class ArticlesController extends Controller
         $articles = Article::all();
         $articlesNumber = CategoriesController::getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         $images = HomeImage::all();
         //dd($articlesNumber);
         return view('articles.index', compact('categories', 'articles', 'articlesNumber', 'images'));
@@ -51,7 +52,8 @@ class ArticlesController extends Controller
         $category_list = Category::lists('name', 'id');
         $articlesNumber = CategoriesController::getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         return view('articles.create', compact('categories', 'category_list', 'articlesNumber'));
     }
 
@@ -108,7 +110,8 @@ class ArticlesController extends Controller
         $images = HomeImage::where('article_id', '=', $id)->get();
         $articlesNumber = CategoriesController::getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         return view('articles.show', compact('categories','article', 'comments', 'articlesNumber', 'images'));
     }
 
@@ -124,7 +127,9 @@ class ArticlesController extends Controller
         $category_list = Category::lists('name', 'id');
         $article = Article::findOrFail($id);
         $articlesNumber = CategoriesController::getCategoryArticle();
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        // if there is no article, set the article number to 0
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         return view('articles.edit', compact('categories', 'category_list', 'article', 'articlesNumber'));
     }
 

@@ -17,7 +17,8 @@ class FooterController extends Controller
         $articles = Article::all();
         $articlesNumber = CategoriesController::getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         $images = HomeImage::all();
         $content = 'footer.privacy_content';
         return view('/footer/footer', compact('categories', 'articles', 'articlesNumber', 'images', 'content'));
@@ -28,7 +29,8 @@ class FooterController extends Controller
         $articles = Article::all();
         $articlesNumber = CategoriesController::getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         $images = HomeImage::all();
         $content = 'footer.about_us';
         return view('/footer/footer', compact('categories', 'articles', 'articlesNumber', 'images', 'content'));
@@ -39,7 +41,8 @@ class FooterController extends Controller
         $articles = Article::all();
         $articlesNumber = CategoriesController::getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         $images = HomeImage::all();
         $content = 'footer.feedback';
         return view('/footer/footer', compact('categories', 'articles', 'articlesNumber', 'images', 'content'));
@@ -50,7 +53,8 @@ class FooterController extends Controller
         $categories = Category::all();
         $articlesNumber = CategoriesController::getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         $feedback_title = $request->title;
         $feedback_body = $request->feedback;
 

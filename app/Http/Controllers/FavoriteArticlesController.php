@@ -28,7 +28,8 @@ class FavoriteArticlesController extends Controller
             ->get();
         $articlesNumber = CategoriesController::getCategoryArticle();
         // if there is no article, set the article number to 0
-        $articlesNumber[sizeof($articlesNumber) + 1] = "0";
+        for($i = sizeof($articlesNumber) + 1; $i< sizeof($categories) + 1; $i ++)
+            $articlesNumber[$i] = '0';
         return view('favorite_articles.index', compact('categories', 'favorites_list','articlesNumber'));
     }
 
