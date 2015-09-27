@@ -6,4 +6,7 @@
             @include('categories.add_list_group')
         @endif
     </div>
+    <div class="col-lg-8">
+        @include('sliders.index')
+    </div>
 @stop
