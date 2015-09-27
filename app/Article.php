@@ -10,7 +10,8 @@ class Article extends Model
         'manager_id',
         'category_id',
         'title',
-        'body'
+        'body',
+        'is_top'
     ];
 
     public function category(){

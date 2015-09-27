@@ -30,6 +30,7 @@ class CreateArticlesTable extends Migration
                 ->onUpdate('cascade');
             $table->string('title');
             $table->text('body');
+            $table->boolean('is_top')->default(false);
             $table->timestamps();
         });
     }
