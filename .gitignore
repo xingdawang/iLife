@@ -4,4 +4,5 @@ Homestead.yaml
 Homestead.json
 .env
 .idea/*
-/public/images/*
+!/public/images/articles/.gitignore
+/public/images/articles/*
