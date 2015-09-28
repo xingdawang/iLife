@@ -9,9 +9,13 @@ use App\Http\Controllers\Controller;
 
 class MobileArticlesController extends Controller
 {
-    public function getArticle($id){
-        $id = 1;
-        $article = Article::findOrFail($id);
-        dd($article);
+    public function getArticle(Request $request){
+//        dd($request);
+        die(json_encode(Array('id' => $request->id)));
+    }
+
+    public function showArticle(){
+
+        return view('mobile/test');
     }
 }

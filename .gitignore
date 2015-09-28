@@ -4,6 +4,5 @@ Homestead.yaml
 Homestead.json
 .env
 .idea/*
-<<<<<<< HEAD
 !/public/images/articles/.gitignore
 /public/images/articles/*
