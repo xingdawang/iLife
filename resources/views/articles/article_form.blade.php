@@ -42,6 +42,16 @@
         </div>
     </div>
     <div class="form-group">
+        {!! Form::label('set_top', 'Set Top:', ['class' => 'col-lg-2 control-label']) !!}
+        <div class="col-lg-8">
+            {!! Form::select('is_top', array(
+                '1' => 'Set Top',
+                '0' => 'Not on top'),
+                '0'
+                ) !!}
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-lg-10 col-lg-offset-2">
             {!! Form::button('Cancel', ['class' => 'btn btn-default', 'type' => 'reset']) !!}
             {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}

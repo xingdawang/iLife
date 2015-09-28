@@ -60,6 +60,7 @@ class ArticlesController extends Controller
         $new_article->category_id = $request->select;
         $new_article->title = $request->title;
         $new_article->body = $request->body;
+        $new_article->is_top = $request->is_top;
         $new_article->save();
 
         // Save article title image
@@ -109,7 +110,7 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd("in update method");
+//        dd($request->all());
         $article = Article::findOrFail($id);
         $article->update($request->all());
         return redirect('articles');
