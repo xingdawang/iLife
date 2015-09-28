@@ -25,3 +25,8 @@ Route::get('privacy','FooterController@showPrivacy');
 Route::get('about_us','FooterController@aboutUs');
 Route::get('feedback', 'FooterController@feedback');
 Route::post('feedback_email',['as'=>'feedback_email', 'uses' => 'FooterController@feedback_email']);
+
+/**
+ * These below routes are for mobiles
+ */
+Route::get('mobile_articles_get_article', 'MobileArticlesController@getArticle');
