@@ -24,7 +24,7 @@ class CommentsController extends Controller
      */
     public function index()
     {
-
+        return redirect('articles');
     }
 
     /**
