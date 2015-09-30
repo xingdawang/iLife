@@ -9,7 +9,7 @@
         {!! Form::label('body', 'Main body', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
             {!! Form::textarea('body', null, ['class' => 'form-control',
-            'rows'=>'4',
+            'rows'=>'8',
             'id'=>'textArea',
             'placeholder' => 'This is the main part of the article']) !!}
         </div>
@@ -17,7 +17,7 @@
     <div class="form-group">
         {!! Form::label('category', 'Category:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
-            {!! Form::select('select',$category_list, null, ['class' => 'form-control', 'id' => 'select']) !!}
+            {!! Form::select('category_id',$category_list, null, ['class' => 'form-control', 'id' => 'select']) !!}
         </div>
     </div>
     <div class="form-group">
@@ -45,7 +45,8 @@
         {!! Form::label('set_top', 'Set Top:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
             {!! Form::select('is_top', array(
-                '1' => 'Set Top',
+                '2' => 'Set Top on All Categories',
+                '1' => 'Set Top on this Category',
                 '0' => 'Not on top'),
                 '0'
                 ) !!}

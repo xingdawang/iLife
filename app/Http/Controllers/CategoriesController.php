@@ -167,6 +167,8 @@ class CategoriesController extends Controller
         $categories = Category::all();
         $category = Category::findOrFail($id);
         $articles = Article::where('category_id', '=', $category->id)->get();
+        $top_list_articles = Article::where('is_top', '=', 2)->get();
+//        dd($top_list_articles);
         // if there is no article, set the article number to 0
         $articlesNumber = [];
         foreach($categories as $category){
@@ -180,6 +182,6 @@ class CategoriesController extends Controller
             $is_manager = User::getCurrentUser()->is_manager;
         else
             $is_manager = false;
-        return compact('categories', 'category', 'articles', 'articlesNumber','images', 'is_manager');
+        return compact('categories', 'category', 'articles', 'top_list_articles', 'articlesNumber','images', 'is_manager');
     }
 }

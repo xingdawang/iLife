@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CommentsFormRequest;
 
 class CommentsController extends Controller
 {
@@ -22,7 +23,7 @@ class CommentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return redirect('articles');
     }
@@ -40,16 +41,17 @@ class CommentsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CommentsFormRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(CommentsFormRequest $request)
     {
         $new_comment = new Comment();
         $new_comment->user_id = Auth::user()->id;
         $new_comment->article_id = $request->article_id;
         $new_comment->body = $request->body;
         $new_comment->save();
+        \Session::flash('flash_message', 'Comment Succeed!');
         return redirect()->route('articles.show',[$request->article_id]);
     }
 
@@ -64,7 +66,7 @@ class CommentsController extends Controller
             ->join('users', 'users.id', '=', 'comments.user_id')
             ->where('article_id', '=', $article_id)
             ->orderBy('comments.created_at', 'desc')
-            ->select('comments.*', 'users.name')
+            ->select('comments.*', 'users.name', 'users.is_manager')
             ->get();
         return $comments;
     }

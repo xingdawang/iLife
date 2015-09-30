@@ -1,17 +1,27 @@
 <div class="col-lg-8">
     <ul class="list-group">
-        <!-- Detect whether there is an no top list -->
+
+        <!-- Detect whether there is a top list -->
         <?php
+
+            // Save state for all most top articles
+            $flag = false;
+
+            // Check for this category top articles
             foreach($articles as $article)
                 if($article->is_top){
                     echo '<h3><font color="red">TOP ARTICLES!</font></h3>';
+                    $flag = true;
                     break;
                 }
+
+            if(!$flag && sizeof($top_list_articles) != 0)
+                echo '<h3><font color="red">TOP ARTICLES!</font></h3>';
         ?>
 
-        <!-- Get top articles list -->
-        @foreach($articles as $article)
-            @if($article->is_top)
+        <!-- Get all categories top articles list -->
+        @if($top_list_articles != null)
+            @foreach($top_list_articles as $article)
                 <li>
                     <h3>
                         <a href="{!! url('articles', $article->id) !!}">
@@ -25,16 +35,46 @@
                         </a>
                     </h3>
                 </li>
-            @endif
-        @endforeach
+            @endforeach
+        @endif
+        <!-- Get this category top articles list -->
+            @foreach($articles as $article)
+                @if($article->is_top == 1)
+                    <li>
+                        <h3>
+                            <a href="{!! url('articles', $article->id) !!}">
+                                @foreach($images as $image)
+                                    @if($image->id  ==  $article->id * 3)
+                                        {!! Html::image($image->image_url, $article->title)  !!}
+                                    @endif
+                                @endforeach
+                                &nbsp;
+                                {!! $article->title !!}
+                            </a>
+                        </h3>
+                    </li>
+                @endif
+            @endforeach
 
-         <?php
-            foreach($articles as $article)
-                if($article->is_top){
+
+        <!-- Detect whether there is a top list -->
+            <?php
+
+                // Save state for all most top articles
+                $flag = false;
+
+                // Check for this category top articles
+                foreach($articles as $article)
+                      if($article->is_top){
+                           echo '<hr />';
+                           $flag = true;
+                            break;
+                      }
+
+                if(!$flag && sizeof($top_list_articles) != 0)
                     echo '<hr />';
-                    break;
-                }
-         ?>
+            ?>
+
 
          <!-- Get common articles list -->
          @foreach($articles as $article)

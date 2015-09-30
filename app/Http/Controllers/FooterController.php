@@ -65,7 +65,7 @@ class FooterController extends Controller
             'feedback_body'     => $feedback_body
         ];
         Mail::send('footer.feedback_content', $data, function($message) {
-            $message->to('feedback@ilife.ie', 'John Smith')->subject('Feedback!');
+            $message->to('feedback@ilife.ie', 'iLife Feedback')->subject('Feedback!');
         });
         return view('/footer/feedback_review',
             compact('categories', 'articlesNumber', 'feedback_title', 'feedback_body', 'is_manager'));

@@ -53,6 +53,7 @@ class FavoriteArticlesController extends Controller
             $favorite_artile->article_id = $request->article_id;
             $favorite_artile->user_id = Auth::user()->id;
             $favorite_artile->save();
+            \Session::flash('flash_message', 'Favorite article add succeed!');
             return redirect()->route('articles.show',[$request->article_id]);
         } else{
             return redirect()->route('articles.show',[$request->article_id]);
@@ -104,6 +105,8 @@ class FavoriteArticlesController extends Controller
         $deleted_favorite_article = Favorite_article::where('article_id', '=', $id)
         ->where('user_id', '=', Auth::user()->id);
         $deleted_favorite_article->delete();
+
+        \Session::flash('flash_message', 'Favorite article delete succeed!');
         return redirect('favorite_articles');
 
     }

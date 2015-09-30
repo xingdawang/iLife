@@ -14,7 +14,6 @@ use Session;
 use Image;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class ArticlesController extends Controller
 {
@@ -57,7 +56,7 @@ class ArticlesController extends Controller
     {
         $new_article = new Article;
         $new_article->user_id = auth()->user()->id;
-        $new_article->category_id = $request->select;
+        $new_article->category_id = $request->category_id;
         $new_article->title = $request->title;
         $new_article->body = $request->body;
         $new_article->is_top = $request->is_top;
@@ -110,7 +109,19 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        dd($request->all());
+        // Save article title image
+        if(Input::file('title_img') != null) {
+            $this->uploadImage('title_img', $id, 'title', 1035, 300);
+        }
+//        dd($request);
+//        dd(Input::file('title_img'));
+        // Save article body image
+        if(Input::file('body_img') != null)
+            $this->uploadImage('body_img', $id, 'body', 1035, 300);
+        // Save article icon
+        if(Input::file('article_icon_img') != null)
+            $this->uploadImage('article_icon_img', $id, 'title_icon', 75, 75);
+
         $article = Article::findOrFail($id);
         $article->update($request->all());
         return redirect('articles');
@@ -154,34 +165,21 @@ class ArticlesController extends Controller
         else {
             // checking file is valid.
             if (Input::file($image_name)->isValid()) {
-                $extension = Input::file($image_name)->getClientOriginalExtension(); // getting image extension
-                $fileName = $article_id.$image_description.'.'.$extension; // rename image
+                // Rename original image
+                $file_name = $this->renameImage($image_name, $article_id, $image_description);
 
-                /**
-                 * Image description manipulation using intervention image
-                 */
-                $img = Image::make(Input::file($image_name));
-                $img->resize($image_width, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $img->crop($image_width, $image_height, 0, 0);
-                $img->save(base_path().'/public/images/articles/'.$fileName);// uploading file to given path
+                // Resize image with intervention image and save it to database
+                $this->saveImage($image_name, $image_width, $image_height, $file_name);
 
-                /**
-                 * Save article id and image url into the database
-                 */
-                $image_db = new HomeImage();
-                $image_db->article_id = $article_id;
-                $fileName = $article_id.$image_description.'.'.$extension; // rename image
-                $image_db->image_url = 'images/articles/'.$fileName;
-                $image_db->save();
+                // Save article id and image url into the database
+                $extension = $this->getImageExtension($image_name);
+                $this->saveImageToDB($article_id, $image_description, $extension);
 
                 // sending back with message
                 Session::flash('success', 'Upload successfully');
                 return redirect('articles/create');
             }
             else {
-                dd('here');
                 // sending back with error message.
                 Session::flash('error', 'uploaded file is not valid');
                 return redirect('articles/create');
@@ -190,11 +188,106 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Get Original image extension name
+     *
+     * @param $image_name (original image name)
+     * @return mixed
+     */
+    public function getImageExtension($image_name){
+        return Input::file($image_name)->getClientOriginalExtension();
+    }
+
+    /**
+     * Rename original image
+     *
+     * @param $image_name (original image name)
+     * @param $article_id (target article id)
+     * @param $image_description (image description)
+     * @return string (renamed image)
+     */
+    public function renameImage($image_name, $article_id, $image_description){
+        // getting image extension
+        $extension = Input::file($image_name)->getClientOriginalExtension();
+        // rename image
+        $file_name = $article_id.$image_description.'.'.$extension;
+        return $file_name;
+    }
+
+    /**
+     * Resize image with intervention image and save it to database
+     *
+     * @param $image_name (Image name)
+     * @param $image_width (target image width)
+     * @param $image_height (target image height)
+     * @param $file_name (resized file name)
+     */
+    public function saveImage($image_name, $image_width, $image_height, $file_name){
+        $img = Image::make(Input::file($image_name));
+        $img->resize($image_width, null, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        $img->crop($image_width, $image_height, 0, 0);
+        $img->save(base_path().'/public/images/articles/'.$file_name);// uploading file to given path
+    }
+
+    /**
+     * Save article id and image url into the database
+     * @param int $article_id (article id)
+     * @param string $image_description (title / body / title_icon)
+     * @param string $extension (original image extension name)
+     */
+    public function saveImageToDB($article_id, $image_description, $extension){
+        $image_db = new HomeImage();
+        $image_list = $this->checkImage($article_id);
+
+        // if the images has exist
+        if($image_list && sizeof($image_list)){
+            $fileName = $article_id.$image_description.'.'.$extension; // rename image
+            switch($image_description){
+                case 'title':
+                    $image_list[0]->image_url = 'images/articles/'.$fileName;
+                    $image_list[0]->save();
+                    break;
+                case 'body':
+                    $image_list[1]->image_url = 'images/articles/'.$fileName;
+                    $image_list[1]->save();
+                    break;
+                case 'title_icon':
+                    $image_list[2]->image_url = 'images/articles/'.$fileName;
+                    $image_list[2]->save();
+                    break;
+            }
+        }else {
+            $image_db->article_id = $article_id;
+            $fileName = $article_id.$image_description.'.'.$extension; // rename image
+            $image_db->image_url = 'images/articles/'.$fileName;
+            $image_db->save();
+        }
+    }
+
+    /**
+     * Check whether a FULL list of images has been inserted, if yes, return list, or return null
+     *
+     * @param $article_id
+     * @return mixed
+     */
+    public function checkImage($article_id){
+        $image_db = new HomeImage();
+        $image_list =  $image_db->where('article_id', '=', $article_id)->get();
+        if(sizeof($image_list) == 3)
+            return $image_list;
+        else
+            return null;
+    }
+
+    /**
      * @return array
      */
     public function loadCategory(){
         $categories = Category::all();
         $articles = Article::all();
+        $top_list_articles = Article::where('is_top', '=', 2)->get();
+//        dd($articles);
         $category_list = Category::lists('name', 'id');
         // link the category id and the its related articles
         $articlesNumber = [];
@@ -209,13 +302,14 @@ class ArticlesController extends Controller
             $is_manager = User::getCurrentUser()->is_manager;
         else
             $is_manager = false;
-        return compact('categories', 'category_list', 'articles', 'articlesNumber', 'images', 'is_manager');
+        return compact('categories', 'category_list', 'articles','top_list_articles', 'articlesNumber', 'images', 'is_manager');
     }
 
     public function loadCategoryWithId($id){
         $categories = Category::all();
         $category_list = Category::lists('name', 'id');
         $article = Article::findOrFail($id);
+        $top_list_articles = Article::where('is_top', '=', 2)->get();
         // link the category id and the its related articles
         $articlesNumber = [];
         foreach($categories as $category){
@@ -231,6 +325,6 @@ class ArticlesController extends Controller
         //find image path
         $images = HomeImage::where('article_id', '=', $id)->get();
         $comments = CommentsController::show($id);
-        return compact('categories', 'category_list', 'article', 'articlesNumber', 'is_manager', 'images', 'comments');
+        return compact('categories', 'category_list', 'article','top_list_articles', 'articlesNumber', 'is_manager', 'images', 'comments');
     }
 }

@@ -10,6 +10,7 @@
                 'method'=>'PATCH',
                 'class'=>'form-horizontal',
                 'action'=>['ArticlesController@update', $article->id],
+                'files'=>true,
             ]) !!}
         @include('articles.article_form')
         {!! Form::close() !!}

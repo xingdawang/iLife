@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Laravel</title>
+	<title>iLife爱生活</title>
 
 	<link href="{{ asset('/css/bootstap.min.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/sticky-footer.css') }}" rel="stylesheet">
@@ -54,7 +54,16 @@
 			</div>
 		</div>
 	</nav>
-		@yield('content')
+
+	<!-- Show flash messages-->
+	@if(Session::has('flash_message'))
+		<div class="alert alert-success">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<p>{!! session('flash_message') !!}</p>
+
+		</div>
+	@endif
+	@yield('content')
 
 	<footer class="footer">
 		<div class="container" align="center" >
@@ -65,6 +74,14 @@
 	</footer>
 
 	<!-- Scripts -->
+	<!-- Show message last for 2.5 seconds, and disappear in 1 second -->
+	<script>
+		$(document).ready(function(){
+			$("div.alert").delay(2500).slideUp(1000);
+		});
+	</script>
+
+
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script>

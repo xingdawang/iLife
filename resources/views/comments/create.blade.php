@@ -14,8 +14,14 @@
             {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
         </div>
     </div>
+    <!-- Error lists-->
+    <div class="form-horizontal">
+        <div class="col-lg-2"></div>
+        <div class="form-group">
+            @include('errors.error_list')
+        </div>
+    </div>
 </fieldset>
-
 <div style="height: 100px">
 </div>
 {!! Form::close() !!}

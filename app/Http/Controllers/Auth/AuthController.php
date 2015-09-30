@@ -7,6 +7,7 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -56,10 +57,25 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+        \Session::flash('flash_message', 'User registration Succeed!');
+
+        //send verification mail to user
+        //--------------------------------------------------------------------------------------------------------------
+        $user_data['name']  = $data['name'];
+
+        Mail::send('email_reply/register_reply', $user_data, function($message) use ($data)
+        {
+            $message->from('no-reply@ilife.ie', "iLife");
+            $message->subject("Welcome to iLife");
+            $message->to($data['email']);
+        });
+
+        return $user;
     }
 }
