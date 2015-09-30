@@ -29,8 +29,10 @@ Route::post('feedback_email',['as'=>'feedback_email', 'uses' => 'FooterControlle
 /**
  * These below routes are for mobiles
  */
-Route::post('mobile_articles_get_article', ['as' => 'mobile_articles_get_article', 'uses' => 'MobileArticlesController@getArticle']);
-
+Route::post('mobile_articles_get_article',
+    ['as' => 'mobile_articles_get_article', 'uses' => 'MobileArticlesController@getArticle']);
+Route::get('mobile_get_category_list',
+    ['as' => 'mobile_get_category_list', 'uses' => 'MobileArticlesController@getCategoryList']);
 
 /**
  * These below routes are for mobiles test

@@ -14,5 +14,6 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         'mobile_articles_get_article',
         'mobile_articles_show_article',
+        'mobile_get_category_list', //iLife iOS Backend API No.9
     ];
 }
