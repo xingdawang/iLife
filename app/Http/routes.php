@@ -29,12 +29,29 @@ Route::post('feedback_email',['as'=>'feedback_email', 'uses' => 'FooterControlle
 /**
  * These below routes are for mobiles
  */
-Route::post('mobile_articles_get_article',
-    ['as' => 'mobile_articles_get_article', 'uses' => 'MobileArticlesController@getArticle']);
-Route::get('mobile_get_category_list',
-    ['as' => 'mobile_get_category_list', 'uses' => 'MobileArticlesController@getCategoryList']);
+Route::post('mobile_user_sign_in',                                  //No.1
+    ['as' => 'mobile_user_sign_in',
+        'uses' => 'MobileArticlesController@userSignIn']);
+Route::post('mobile_user_sign_up',                                  //No.2
+    ['as' => 'mobile_user_sign_up',
+        'uses' => 'MobileArticlesController@userSignUp']);
+Route::post('mobile_user_profile',                                  //No.3
+    ['as' => 'mobile_user_profile',
+        'uses' => 'MobileArticlesController@userProfile']);
+Route::get('mobile_get_article_list',                               //No.4
+    ['as' => 'mobile_get_article_list',
+        'uses' => 'MobileArticlesController@getArticleList']);
+Route::post('mobile_article_details',                               //No.5
+    ['as' => 'mobile_article_details',
+        'uses' => 'MobileArticlesController@ArticleDetails']);
+Route::get('mobile_get_category_list',                              //No.11
+    ['as' => 'mobile_get_category_list',
+        'uses' => 'MobileArticlesController@getCategoryList']);
+Route::get('mobile_get_start_page',                                 //No.13
+    ['as' => 'mobile_get_start_page',
+        'uses' => 'MobileArticlesController@getStartPage']);
 
 /**
- * These below routes are for mobiles test
+ * This below routes are for mobiles test
  */
-Route::get('mobile_articles_show_article', 'MobileArticlesController@showArticle');
+Route::get('test', 'MobileArticlesController@test');
