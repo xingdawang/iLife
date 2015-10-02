@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Favorite_article;
 use App\User;
+use App\Comment;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -160,7 +162,7 @@ class MobileArticlesController extends Controller
      * @param Request $request
      * @return string
      */
-    public function ArticleDetails(Request $request){
+    public function articleDetails(Request $request){
 
         $article = Article::find($request->article_id);
         if(is_null($article)){
@@ -196,11 +198,162 @@ class MobileArticlesController extends Controller
     }
 
     /**
+     * iLife iOS Backend API No.6
+     * @param Request $request
+     * @return string
+     */
+    public function commentArticle(Request $request){
+
+        $article = Article::find($request->article_id);
+        $user = User::find($request->user_id);
+        if(is_null($article)){ //Check whether article exists
+            $result = Array(
+                'code'      => 6,
+                'message'   => 'article is not found',
+                'data'      => null
+            );
+        } elseif(is_null($user)){ // Check user exists
+            $result = Array(
+                'code'      => 7,
+                'message'   => 'user id is not found',
+                'data'      => null
+            );
+        } else{
+            $comment = new Comment();
+            $comment->body = $request->comment_body;
+            $comment->user_id = $request->user_id;
+            $comment->article_id = $request->article_id;
+            $comment->save();
+            $result = Array(
+                'code'      => 1000,
+                'message'   => 'Post comment succeed',
+                'data'      => null
+            );
+        }
+        return json_encode($result);
+    }
+
+    /**
+     * iLife iOS Backend API No.7
+     * @param Request $request
+     * @return string
+     */
+    public function getArticleComments(Request $request){
+        $article = Article::find($request->article_id);
+        if(is_null($article)){ //Check whether article exists
+            $result = Array(
+                'code'      => 8,
+                'message'   => 'article is not found',
+                'data'      => null
+            );
+        } else{
+            $comments = Comment::where('article_id', $request->article_id)->get();
+            foreach($comments as $comment){
+                $each_comment[] = Array(
+                    'user_id'       => $comment->user_id,
+                    'comment_body'  => $comment->body,
+                    'created_at'    => $comment->created_at
+                );
+            }
+            $result = Array(
+                'code'      => 1000,
+                'message'   => 'Get comment succeed',
+                'data'      => $each_comment
+            );
+        }
+        return json_encode($result);
+    }
+
+    /**
+     * iLife iOS Backend API No.8
+     * @param Request $request
+     * @return string
+     */
+    public function getFavoriteArticle(Request $request){
+        $favorite_articles = Favorite_article::where('user_id', $request->user_id)->get();
+        foreach($favorite_articles as $favorite_article){
+            $favorite_article_list[] = Array(
+                'article_id' => $favorite_article->id
+            );
+        }
+        $result = Array(
+            'code'      => 1000,
+            'message'   => 'Get favorite succeed',
+            'data'      => $favorite_article_list
+        );
+        return json_encode($result);
+    }
+
+    /**
      * iLife iOS Backend API No.9
+     * @param Request $request
+     * @return string
+     */
+    public function addFavoriteArticle(Request $request){
+        $article = Article::find($request->article_id);
+        $user = User::find($request->user_id);
+        if(is_null($article)){ //Check whether article exists
+            $result = Array(
+                'code'      => 11,
+                'message'   => 'article is not found',
+                'data'      => null
+            );
+        } elseif(is_null($user)){ // Check user exists
+            $result = Array(
+                'code'      => 10,
+                'message'   => 'user id is not found',
+                'data'      => null
+            );
+        } else{
+            Favorite_article::create($request->all());
+            $result = Array(
+                'code'      => 1000,
+                'message'   => 'Add favorite succeed',
+                'data'      => null
+            );
+        }
+        return json_encode($result);
+    }
+
+    /**
+     * iLife iOS Backend API No.10
+     * @param Request $request
+     * @return string
+     */
+    public function deleteFavoriteArticle(Request $request){
+        $article = Favorite_article::where('article_id', $request->article_id)
+            ->where('user_id', $request->user_id)->get();
+        $user = User::find($request->user_id);
+        if(is_null($article)){ //Check whether article exists
+            $result = Array(
+                'code'      => 12,
+                'message'   => 'user favorite is not found',
+                'data'      => null
+            );
+            dd($result);
+        } elseif(is_null($user)){ // Check user exists
+            $result = Array(
+                'code'      => 13,
+                'message'   => 'user id is not found',
+                'data'      => null
+            );
+        } else{
+            Favorite_article::where('article_id', $request->article_id)
+                ->where('user_id', $request->user_id)->delete();
+            $result = Array(
+                'code'      => 1000,
+                'message'   => 'Delete favorite succeed',
+                'data'      => null
+            );
+        }
+        return json_encode($result);
+    }
+
+    /**
+     * iLife iOS Backend API No.11
      */
     public function getCategoryList() {
         $categories = Category::all();
-
         foreach ($categories as $category) {
             $category_list[] = Array(
                 'id'    => $category->id,
@@ -216,12 +369,62 @@ class MobileArticlesController extends Controller
         return json_encode($result);
     }
 
-    public function getStartPage(){
-        $result = Array(
-            'text'  => 'This is the initial page!',
-            'url'   => 'images/mobile/start_page.jpg'
-        );
-        return $result;
+    /**
+     * iLife iOS Backend API No.12
+     * @param Request $request
+     * @return string
+     */
+    public function getCategoryArticles(Request $request){
+        $category = Category::find($request->category_id);
+        if(is_null($category)){
+            $result = Array(
+                'code'      => 14,
+                'message'   => 'category_id is not found',
+                'data'      => null
+            );
+        } else {
+            $category_articles = Article::where('category_id', $request->category_id)->get();
+            foreach($category_articles as $category_article){
+                $article[] = Array(
+                    'article_id' => $category_article->id
+                );
+            }
+            $result = Array(
+                'code'      => 1000,
+                'message'   => 'get category details succeed',
+                'data'      => $article
+            );
+        }
+        return json_encode($result);
+    }
+
+    /**
+     * iLife iOS Backend API No.13
+     * @param Request $request
+     * @return string
+     */
+    public function getStartPage(Request $request){
+        if( $request->launch_id != '4_4s_640x960' &&
+            $request->launch_id != '5_5s_640x1136' &&
+            $request->launch_id != '6_6s_640x1334' &&
+            $request->launch_id != '6p_6sp_1242x2208'
+        ) {
+            $result = Array(
+                'code'      => 15,
+                'message'   => 'Launch_id is not found',
+                'data'      => null
+            );
+        } else {
+            $data = Array(
+                'text'  => 'This is the initial page!',
+                'url'   => 'images/mobile/'.$request->launch_id.'.jpg'
+            );
+            $result = Array(
+                'code'      => 1000,
+                'message'   => 'Get launch image succeed',
+                'data'      => $data
+            );
+        }
         return json_encode($result);
     }
 }

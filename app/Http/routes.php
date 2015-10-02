@@ -43,15 +43,33 @@ Route::get('mobile_get_article_list',                               //No.4
         'uses' => 'MobileArticlesController@getArticleList']);
 Route::post('mobile_article_details',                               //No.5
     ['as' => 'mobile_article_details',
-        'uses' => 'MobileArticlesController@ArticleDetails']);
+        'uses' => 'MobileArticlesController@articleDetails']);
+Route::post('mobile_comment_article',                               //No.6
+    ['as' => 'mobile_comment_article',
+        'uses' => 'MobileArticlesController@commentArticle']);
+Route::post('mobile_get_article_comments',                          //No.7
+    ['as' => 'mobile_get_article_comments',
+        'uses' => 'MobileArticlesController@getArticleComments']);
+Route::post('mobile_get_favorite_articles',                         //No.8
+    ['as' => 'mobile_get_favorite_articles',
+        'uses' => 'MobileArticlesController@getFavoriteArticle']);
+Route::post('mobile_add_favorite_articles',                         //No.9
+    ['as' => 'mobile_add_favorite_articles',
+        'uses' => 'MobileArticlesController@addFavoriteArticle']);
+Route::post('mobile_delete_favorite_articles',                      //No.10
+    ['as' => 'mobile_delete_favorite_articles',
+        'uses' => 'MobileArticlesController@deleteFavoriteArticle']);
 Route::get('mobile_get_category_list',                              //No.11
     ['as' => 'mobile_get_category_list',
         'uses' => 'MobileArticlesController@getCategoryList']);
-Route::get('mobile_get_start_page',                                 //No.13
+Route::post('mobile_get_category_articles',                          //No.12
+    ['as' => 'mobile_get_category_articles',
+        'uses' => 'MobileArticlesController@getCategoryArticles']);
+Route::post('mobile_get_start_page',                                 //No.13
     ['as' => 'mobile_get_start_page',
         'uses' => 'MobileArticlesController@getStartPage']);
 
 /**
  * This below routes are for mobiles test
  */
-Route::get('test', 'MobileArticlesController@test');
+//Route::get('test', 'MobileArticlesController@test');
