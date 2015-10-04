@@ -427,4 +427,32 @@ class MobileArticlesController extends Controller
         }
         return json_encode($result);
     }
+
+    /**
+     * iLife iOS Backend API No.14
+     * @return \Illuminate\View\View
+     */
+    public function getMobileSliders(){
+
+        return view('sliders/index');
+    }
+
+    /**
+     * iLife iOS Backend API No.15
+     * @return string
+     */
+    public function getMobileSlider_url(){
+        $slide_urls = Array(
+            'slide_url_1' => 'http://www.google.ie',
+            'slide_url_2' => '#',
+            'slide_url_3' => '#',
+            'slide_url_4' => '#'
+        );
+        $result = Array(
+            'code'      => 1000,
+            'message'   => 'Get url succeed',
+            'data'      => $slide_urls
+        );
+        return json_encode($result);
+    }
 }

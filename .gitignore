@@ -4,5 +4,3 @@ Homestead.yaml
 Homestead.json
 .env
 .idea/*
-!/public/images/articles/.gitignore
-/public/images/articles/*

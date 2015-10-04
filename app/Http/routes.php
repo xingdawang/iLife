@@ -68,6 +68,8 @@ Route::post('mobile_get_category_articles',                          //No.12
 Route::post('mobile_get_start_page',                                 //No.13
     ['as' => 'mobile_get_start_page',
         'uses' => 'MobileArticlesController@getStartPage']);
+Route::get('mobile_slides','MobileArticlesController@getMobileSliders');        //No.14
+Route::get('mobile_slide_url','MobileArticlesController@getMobileSlider_url');  //Np.15
 
 /**
  * This below routes are for mobiles test
