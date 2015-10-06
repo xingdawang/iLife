@@ -75,7 +75,6 @@
 		</div>
 	@endif
 	@yield('content')
-
 	<footer class="footer">
 		<div class="container" align="center" >
 			<a href="{!! url('privacy') !!}">Privacy</a> |

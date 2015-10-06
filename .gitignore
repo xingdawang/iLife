@@ -3,4 +3,5 @@
 Homestead.yaml
 Homestead.json
 .env
-.idea/*
+.idea/
+/public/images/articles/
