@@ -2,7 +2,7 @@
     <div class="form-group">
         {!! Form::label('title', 'Title:', ['class'=>'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
-            {!! Form::text('title', null, ['class' => 'form-control', 'placeholder' => 'article title']) !!}
+            {!! Form::text('title', null, ['class' => 'form-control', 'placeholder' => 'article title', 'required']) !!}
         </div>
     </div>
     <div class="form-group">
@@ -11,33 +11,34 @@
             {!! Form::textarea('body', null, ['class' => 'form-control',
             'rows'=>'8',
             'id'=>'textArea',
-            'placeholder' => 'This is the main part of the article']) !!}
+            'placeholder' => 'This is the main part of the article',
+            'required']) !!}
         </div>
     </div>
     <div class="form-group">
         {!! Form::label('category', 'Category:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
-            {!! Form::select('category_id',$category_list, null, ['class' => 'form-control', 'id' => 'select']) !!}
+            {!! Form::select('category_id',$category_list, null, ['class' => 'form-control', 'id' => 'select', 'required']) !!}
         </div>
     </div>
     <div class="form-group">
         {!! Form::label('article_img', 'Article Image:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
-            {!! Form::file('title_img') !!}
+            {!! Form::file('title_img', ['required']) !!}
             {!! Form::label('article_img', '(1035 px width preferred)') !!}
         </div>
     </div>
     <div class="form-group">
         {!! Form::label('body_img', 'Body Image:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
-            {!! Form::file('body_img') !!}
+            {!! Form::file('body_img', ['required']) !!}
             {!! Form::label('article_img', '(1035 px width preferred)') !!}
         </div>
     </div>
     <div class="form-group">
         {!! Form::label('icon_img', 'Icon Image:', ['class' => 'col-lg-2 control-label']) !!}
         <div class="col-lg-8">
-            {!! Form::file('article_icon_img') !!}
+            {!! Form::file('article_icon_img', ['required']) !!}
             {!! Form::label('article_icon_img', '(75 * 75 px width preferred)') !!}
         </div>
     </div>
