@@ -1,12 +1,12 @@
 {!! Form::open([
             'method' => 'POST',
-            'route' => 'mobile_get_start_page',
+            'route' => 'mobile_article_details',
             'class' => 'form-horizontal'
         ]) !!}
 
-    {!! Form::label('id', 'A ID:', ['class'=>'col-lg-3 control-label']) !!}
+    {!! Form::label('id', 'Article ID:', ['class'=>'col-lg-3 control-label']) !!}
     {!! Form::text('article_id', null, ['class' => 'form-control']) !!}<br/>
-    {!! Form::label('id', 'U ID:', ['class'=>'col-lg-3 control-label']) !!}
+    {!! Form::label('id', 'User ID:', ['class'=>'col-lg-3 control-label']) !!}
     {!! Form::text('user_id', null, ['class' => 'form-control']) !!}<br/>
     {!! Form::label('Comment', 'Comment:', ['class'=>'col-lg-3 control-label']) !!}
     {!! Form::text('comment_body', null, ['class' => 'form-control']) !!}<br/>

@@ -164,7 +164,6 @@ class MobileArticlesController extends Controller
      * @return string
      */
     public function articleDetails(Request $request){
-
         $article = Article::find($request->article_id);
         if(is_null($article)){
             $result = Array(
@@ -178,8 +177,15 @@ class MobileArticlesController extends Controller
             $article_image = DB::table('images')
                 ->where('article_id', $request->article_id)
                 ->get();
-            $article_title_image = $article_image[0]->image_url;
-            $article_body_image = $article_image[1]->image_url;
+
+            // Check whether the article image is null
+            if(sizeof($article_image) != 0){
+                $article_title_image = $article_image[0]->image_url;
+                $article_body_image = $article_image[1]->image_url;
+            } else{
+                $article_title_image = null;
+                $article_body_image = null;
+            }
             $article_details = Array(
                 'user_id'       => $article->user_id,
                 'title'         => $article->title,
@@ -194,6 +200,7 @@ class MobileArticlesController extends Controller
                 'message'   => 'Get article details succeed',
                 'data'      => $article_details
             );
+            dd($result);
             return json_encode($result);
         }
     }
