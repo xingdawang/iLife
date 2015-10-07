@@ -152,7 +152,7 @@ class MobileArticlesController extends Controller
             ->select('articles.id as article_id', 'articles.title','articles.is_top',
                 'images.image_url', 'articles.created_at', 'articles.updated_at')
             ->join('images', 'images.article_id', '=', 'articles.id')
-            ->whereRaw('images.id = 3 * articles.id')
+            ->where('images.image_url', 'like', '%title_icon%')
             ->get();
         return json_encode($articles);
     }
