@@ -200,7 +200,6 @@ class MobileArticlesController extends Controller
                 'message'   => 'Get article details succeed',
                 'data'      => $article_details
             );
-            dd($result);
             return json_encode($result);
         }
     }
