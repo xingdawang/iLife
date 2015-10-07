@@ -162,12 +162,20 @@ class CategoriesController extends Controller
         return compact('categories', 'articlesNumber', 'is_manager');
     }
 
-
+    /**
+     * @param $id
+     * @return array
+     */
     public function loadCategoryWithId($id){
         $categories = Category::all();
         $category = Category::findOrFail($id);
         $articles = Article::where('category_id', '=', $category->id)->get();
-        $top_list_articles = Article::where('is_top', '=', 2)->get();
+//        dd($articles);
+        $top_list_articles = DB::table('articles')
+            ->join('images', 'images.article_id', '=', 'articles.id')
+            ->where('image_url', 'like', '%title_icon%')
+            ->where('articles.is_top', '=', 2)
+            ->get();
 //        dd($top_list_articles);
         // if there is no article, set the article number to 0
         $articlesNumber = [];
@@ -177,7 +185,13 @@ class CategoriesController extends Controller
             else
                 $articlesNumber[$category->id] = '0';
         }
-        $images = HomeImage::all();
+
+        $images = DB::table('images')
+            ->join('articles', 'images.article_id', '=', 'articles.id')
+            ->where('articles.category_id', '=', $id)
+            ->where('image_url', 'like', '%title_icon%')
+            ->get();
+//        dd($images);
         if(User::getCurrentUser() != null)
             $is_manager = User::getCurrentUser()->is_manager;
         else

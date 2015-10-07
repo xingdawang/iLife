@@ -23,5 +23,7 @@
             {!! Form::submit('Delete', ['class' => 'btn btn-primary'], $article->id) !!}
         </div>
         {!! Form::close() !!}
+        <div style="height: 65px"></div>
     </div>
+
 @stop

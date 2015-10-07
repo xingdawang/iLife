@@ -286,7 +286,11 @@ class ArticlesController extends Controller
     public function loadCategory(){
         $categories = Category::all();
         $articles = Article::all();
-        $top_list_articles = Article::where('is_top', '=', 2)->get();
+        $top_list_articles = DB::table('articles')
+            ->join('images', 'images.article_id', '=', 'articles.id')
+            ->where('image_url', 'like', '%title_icon%')
+            ->where('articles.is_top', '=', 2)
+            ->get();
 //        dd($articles);
         $category_list = Category::lists('name', 'id');
         // link the category id and the its related articles
@@ -297,7 +301,12 @@ class ArticlesController extends Controller
             else
                 $articlesNumber[$category->id] = '0';
         }
-        $images = HomeImage::all();
+
+        $images = DB::table('images')
+            ->join('articles', 'images.article_id', '=', 'articles.id')
+            ->where('image_url', 'like', '%title_icon%')
+            ->get();
+//        dd($images);
         if(User::getCurrentUser() != null)
             $is_manager = User::getCurrentUser()->is_manager;
         else
@@ -305,6 +314,10 @@ class ArticlesController extends Controller
         return compact('categories', 'category_list', 'articles','top_list_articles', 'articlesNumber', 'images', 'is_manager');
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
     public function loadCategoryWithId($id){
         $categories = Category::all();
         $category_list = Category::lists('name', 'id');

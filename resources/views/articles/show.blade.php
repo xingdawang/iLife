@@ -4,7 +4,9 @@
         @include('.categories.list_group')
     </div>
     <div class="col-lg-8">
-        {!! Html::image($images[0]->image_url, $article->title)  !!}
+        @if(sizeof($images))
+            {!! Html::image($images[0]->image_url, $article->title)  !!}
+        @endif
         <h1>
             {!! $article->title  !!}
             @include('favorite_articles.store')
@@ -20,8 +22,10 @@
             <h4>
                 {!! nl2br($article->body) !!}
                 <br />
-                <hr />
-                {!! Html::image($images[1]->image_url, $article->title)  !!}
+                @if(sizeof($images))
+                    <hr />
+                    {!! Html::image($images[1]->image_url, $article->title)  !!}
+                @endif
             </h4>
         </article>
         <hr />
