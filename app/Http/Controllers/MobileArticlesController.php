@@ -151,8 +151,9 @@ class MobileArticlesController extends Controller
         $articles = DB::table('articles')
             ->select('articles.id as article_id', 'articles.title','articles.is_top',
                 'images.image_url', 'articles.created_at', 'articles.updated_at')
-            ->join('images', 'images.article_id', '=', 'articles.id')
+            ->Leftjoin('images', 'images.article_id', '=', 'articles.id')
             ->where('images.image_url', 'like', '%title_icon%')
+            ->orWhere('image_url', null)
             ->get();
         return json_encode($articles);
     }
