@@ -66,6 +66,30 @@
             ?>
 
         {{-- Get common articles list --}}
+        @foreach($articles as $article)
+            @if($article->is_top == 0)
+                        <li>
+                            <h3>
+                                <?php $flag = false; ?>
+                                @foreach($images as $image)
+                                    @if($image->article_id == $article->id)
+                                        <a href="{!! url('articles', $article->id) !!}">
+                                        {!! Html::image($image->image_url) !!}
+                                        {!! $image->title !!}
+                                        <?php $flag = true; ?>
+                                    @endif
+                                @endforeach
+
+                                @if(!$flag)
+                                    <a href="{!! url('articles', $article->id) !!}">
+                                        {!! $article->title !!}
+                                    </a>
+                                @endif
+                            </h3>
+                        </li>
+            @endif
+        @endforeach
+{{--
         @foreach($images as $image)
             @if($image->is_top == 0)
                 <li>
@@ -78,6 +102,7 @@
                 </li>
             @endif
         @endforeach
+--}}
 
         @if($is_manager)
                 <a href={!! url('articles/create') !!}>
