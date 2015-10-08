@@ -20,7 +20,9 @@
             @endif
             <hr />
             <h4>
-                {!! nl2br($article->body) !!}
+                <p class="text-justify">
+                    {!! nl2br($article->body) !!}
+                </p>
                 <br />
                 @if(sizeof($images))
                     <hr />
