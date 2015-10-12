@@ -6,3 +6,4 @@ Homestead.json
 .idea/blade.xml
 .idea/*
 /public/images/articles/
+resources/views/mobile/

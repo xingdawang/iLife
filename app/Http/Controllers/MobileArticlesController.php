@@ -393,7 +393,8 @@ class MobileArticlesController extends Controller
             $category_articles = Article::where('category_id', $request->category_id)->get();
             foreach($category_articles as $category_article){
                 $article[] = Array(
-                    'article_id' => $category_article->id
+                    'article_id' => $category_article->id,
+                    'article_title' =>$category_article->title
                 );
             }
             $result = Array(

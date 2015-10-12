@@ -1,11 +1,13 @@
 {!! Form::open([
             'method' => 'POST',
-            'route' => 'mobile_article_details',
+            'route' => 'mobile_get_category_articles',
             'class' => 'form-horizontal'
         ]) !!}
 
     {!! Form::label('id', 'Article ID:', ['class'=>'col-lg-3 control-label']) !!}
     {!! Form::text('article_id', null, ['class' => 'form-control']) !!}<br/>
+    {!! Form::label('id', 'Category ID:', ['class'=>'col-lg-3 control-label']) !!}
+    {!! Form::text('category_id', null, ['class' => 'form-control']) !!}<br/>
     {!! Form::label('id', 'User ID:', ['class'=>'col-lg-3 control-label']) !!}
     {!! Form::text('user_id', null, ['class' => 'form-control']) !!}<br/>
     {!! Form::label('Comment', 'Comment:', ['class'=>'col-lg-3 control-label']) !!}
